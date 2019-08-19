@@ -2,17 +2,23 @@ import * as vscode from 'vscode';
 
 export default class TreeTest extends vscode.TreeItem {
 
-    public testData: any;
+    public testCafeData: any;
+    public filepath: string;
         
     constructor(
         label: string, 
         collapsibleState: vscode.TreeItemCollapsibleState,
-        testData: any,
-        command?: vscode.Command
+        testCafeData: any,
+        filepath: string
     ) {
         super(label, collapsibleState);
-        this.testData = testData;
-        this.command = command;
+        this.testCafeData = testCafeData;
+        this.filepath = filepath;
+        this.command =  {
+            command: 'testOutline.openTest', 
+            title: "Open", 
+            arguments: [this, ]
+        };
     }
      
 }

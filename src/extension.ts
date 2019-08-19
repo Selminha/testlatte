@@ -7,12 +7,12 @@ export async function activate(context: vscode.ExtensionContext) {
     const testProvider = new TestProvider();
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
 
-	vscode.commands.registerCommand('testOutline.openTest', task => {
-		vscode.tasks.executeTask(task).then(function (value) {
-			return value;
-		}, function(e) {
-			console.error('Error');
-		});
+	vscode.commands.registerCommand('testOutline.openTest', treeTest => {
+		// vscode.tasks.executeTask(task).then(function (value) {
+		// 	return value;
+		// }, function(e) {
+		// 	console.error('Error');
+		// });
 	});
 }
 

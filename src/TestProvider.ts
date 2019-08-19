@@ -59,22 +59,22 @@ export class TestProvider implements vscode.TreeDataProvider<TreeTest> {
   
         let treeTests: TreeTest[] = [];
         
-        if(test) {
-            if(test.testData.tests === undefined) {
+        if (test) {
+            if (test.testCafeData.tests === undefined) {
                 // nothing to return
                 return treeTests;
             }
 
-            test.testData.tests.forEach((test: any) => {
-                treeTests.push(new TreeTest(test.name, vscode.TreeItemCollapsibleState.None, test));
+            test.testCafeData.tests.forEach(function (testCafeData: any) {
+                treeTests.push(new TreeTest(testCafeData.name, vscode.TreeItemCollapsibleState.None, testCafeData, test.filepath));
             });
         }
         else {
             let fileList = this.getFileList(vscode.workspace.rootPath);
             for (const file of fileList) {
                 let listTest = await this.getTests(file);
-                for (const test of listTest) {
-                    treeTests.push(new TreeTest(test.name,vscode.TreeItemCollapsibleState.Collapsed, test));
+                for (const testCafeData of listTest) {
+                    treeTests.push(new TreeTest(testCafeData.name,vscode.TreeItemCollapsibleState.Collapsed, testCafeData, file));
                 }
             }
         }    
