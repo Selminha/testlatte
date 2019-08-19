@@ -27,14 +27,14 @@
 				"command": "nodeDependencies.refreshEntry",
 				"title": "Refresh",
 				"icon": {
-				  "light": "resources/light/refresh.svg",
-				  "dark": "resources/dark/refresh.svg"
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
 				}
-			  },
-			  {
+			},
+			{
 				"command": "nodeDependencies.addEntry",
 				"title": "Test"
-			  },
+			},
 			{
 				"command": "testOutline.openTest",
 				"title": "Opem"
@@ -43,15 +43,15 @@
 		"menus": {
 			"view/title": [
 				{
-				  "command": "nodeDependencies.refreshEntry",
-				  "when": "view == testOutline",
-				  "group": "navigation"
+					"command": "nodeDependencies.refreshEntry",
+					"when": "view == testOutline",
+					"group": "navigation"
 				},
 				{
-				  "command": "nodeDependencies.addEntry",
-				  "when": "view == testOutline"
+					"command": "nodeDependencies.addEntry",
+					"when": "view == testOutline"
 				}
-			  ]
+			]
 		}
 	},
 	"scripts": {
