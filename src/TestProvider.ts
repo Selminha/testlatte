@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import TreeTest from './TreeTest';
 
-export class TestProvider implements vscode.TreeDataProvider<TreeTest> {
+export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
   
     constructor() {
   

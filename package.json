@@ -14,21 +14,43 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration": {
+			"title": "Testcafe Runner",
+			"properties": {
+				"testcaferunner.browser": {
+					"type": "string",
+					"default": "chrome",
+					"description": "Browser used to run tests",
+					"enum": [
+						"chrome",
+						"firefox"
+					],
+					"enumDescriptions": [
+						"Use Chrome to run tests",
+						"Use Firefox to run tests"
+					]
+				}
+			}
+		},
 		"views": {
 			"test": [
 				{
 					"id": "testOutline",
-					"name": "TestCafe Runner"
+					"name": "TestCafe Test List"
+				},
+				{
+					"id": "browserSelection",
+					"name": "Select Browser"
 				}
 			]
 		},
 		"commands": [
 			{
 				"command": "nodeDependencies.refreshEntry",
-				"title": "Refresh",
+				"title": "Run All",
 				"icon": {
-					"light": "resources/light/refresh.svg",
-					"dark": "resources/dark/refresh.svg"
+					"light": "resources/light/run.svg",
+					"dark": "resources/dark/run.svg"
 				}
 			},
 			{
@@ -74,6 +96,7 @@
 	},
 	"dependencies": {
 		"fs": "0.0.1-security",
-		"testcafe": "^1.4.1"
+		"testcafe": "^1.4.1",
+		"testcafe-browser-tools": "^1.6.8"
 	}
 }
