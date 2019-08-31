@@ -83,7 +83,7 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
  
     }
   
-    getTreeItem(test: TreeTest): vscode.TreeItem {
+    public getTreeItem(test: TreeTest): vscode.TreeItem {
         return test;
     }
 }

@@ -4,25 +4,35 @@ import TreeBrowser from './TreeBrowser';
 let testcafeBrowserTools = require ('testcafe-browser-tools');
 
 export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrowser> {
+    private _onDidChangeTreeData: vscode.EventEmitter<TreeBrowser> = new vscode.EventEmitter<TreeBrowser>();
+    readonly onDidChangeTreeData: vscode.Event<TreeBrowser> = this._onDidChangeTreeData.event;
 
-    public getChildren(browser?: TreeBrowser): Promise<TreeBrowser[]> { 
+    private treeBrowser: TreeBrowser[] = [];
+
+    public getChildren(browser?: TreeBrowser): TreeBrowser[] { 
         if(browser) {
-            Promise.resolve([] as TreeBrowser[]);
+            return [];
         }
 
-        return new Promise((resolve, reject) => {
-            testcafeBrowserTools.getInstallations()
-            .then((browserList: any) => {
-                let treeBrowser: TreeBrowser[] = [];
-                for (const browser in browserList) {
-                    treeBrowser.push(new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None));
-                }
-                resolve(treeBrowser);
-            });
-        });        
+        return this.treeBrowser;
     }
 
-    getTreeItem(browser: TreeBrowser): vscode.TreeItem {
+    public getTreeItem(browser: TreeBrowser): vscode.TreeItem {
         return browser;
+    }
+
+    public async createBrowserList() {
+        let browserList = await testcafeBrowserTools.getInstallations();
+        if(browserList.length <= 0) {
+            return;
+        }
+
+        for (const browser in browserList) {
+            this.treeBrowser.push(new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None, this));
+        }
+    }
+
+    public refresh() {
+        this._onDidChangeTreeData.fire();
     }
 }

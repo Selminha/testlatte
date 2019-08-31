@@ -14,24 +14,6 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"configuration": {
-			"title": "Testcafe Runner",
-			"properties": {
-				"testcaferunner.browser": {
-					"type": "string",
-					"default": "chrome",
-					"description": "Browser used to run tests",
-					"enum": [
-						"chrome",
-						"firefox"
-					],
-					"enumDescriptions": [
-						"Use Chrome to run tests",
-						"Use Firefox to run tests"
-					]
-				}
-			}
-		},
 		"views": {
 			"test": [
 				{
@@ -46,7 +28,7 @@
 		},
 		"commands": [
 			{
-				"command": "nodeDependencies.refreshEntry",
+				"command": "nodeDependencies.refreshEntry.example",
 				"title": "Run All",
 				"icon": {
 					"light": "resources/light/run.svg",
@@ -54,24 +36,34 @@
 				}
 			},
 			{
-				"command": "nodeDependencies.addEntry",
+				"command": "nodeDependencies.addEntry.example",
 				"title": "Test"
 			},
 			{
 				"command": "testOutline.openTest",
 				"title": "Open"
+			},
+			{
+				"command": "browserSelection.toggleSelection",
+				"title": "Select"
 			}
 		],
 		"menus": {
 			"view/title": [
 				{
-					"command": "nodeDependencies.refreshEntry",
+					"command": "nodeDependencies.refreshEntry.example",
 					"when": "view == testOutline",
 					"group": "navigation"
 				},
 				{
-					"command": "nodeDependencies.addEntry",
+					"command": "nodeDependencies.addEntry.example",
 					"when": "view == testOutline"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "browserSelection.selectBrowser.example",
+					"group": "inline"
 				}
 			]
 		}

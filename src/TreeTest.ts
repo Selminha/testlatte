@@ -16,7 +16,7 @@ export default class TreeTest extends vscode.TreeItem {
         this.filepath = filepath;
         this.command =  {
             command: 'testOutline.openTest', 
-            title: "Open", 
+            title: 'Open', 
             arguments: [this, ]
         };
 

@@ -9,11 +9,16 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
 
 	const browserProvider = new BrowserProvider();
+	await browserProvider.createBrowserList();
 	vscode.window.registerTreeDataProvider('browserSelection', browserProvider);
 
 	vscode.commands.registerCommand('testOutline.openTest', async treeTest => {
 		treeTest.openTest();
-		await vscode.window.showQuickPick(['explorer', 'search', 'scm', 'debug', 'extensions'], { placeHolder: 'Select the view to show when opening a window.' });
+	});
+
+	vscode.commands.registerCommand('browserSelection.toggleSelection', async treeBrowser => {
+		treeBrowser.toggleSelection();
+		treeBrowser.providerParent.refresh();
 	});
 }
 
