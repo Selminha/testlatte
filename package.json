@@ -40,12 +40,16 @@
 				"title": "Test"
 			},
 			{
-				"command": "testOutline.openTest",
-				"title": "Open"
-			},
-			{
 				"command": "browserSelection.toggleSelection",
 				"title": "Select"
+			},
+			{
+				"command": "testOutline.runTest",
+				"title": "Run Test",
+				"icon": {
+					"light": "resources/light/run.svg",
+					"dark": "resources/dark/run.svg"
+				}
 			}
 		],
 		"menus": {
@@ -62,10 +66,21 @@
 			],
 			"view/item/context": [
 				{
-					"command": "browserSelection.selectBrowser.example",
+					"command": "testOutline.runTest",
+					"when": "view == testOutline",
 					"group": "inline"
 				}
 			]
+		},
+		"configuration": {
+			"title": "Testcafe Runner",
+			"properties": {
+				"testcafeRunner.filePath" : {
+					"type" : "string",
+					"default" : "test/",
+					"description": "Files or directories (separated by a space) from which to search and run the tests."
+				}
+			}
 		}
 	},
 	"scripts": {

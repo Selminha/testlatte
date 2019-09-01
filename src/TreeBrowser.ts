@@ -16,15 +16,12 @@ export default class TreeBrowser extends vscode.TreeItem {
 
     public selected: boolean;
     public iconPath = this.notSelectedIconPath;  
-    public providerParent:  BrowserProvider; 
 
     constructor(
         label: string, 
-        collapsibleState: vscode.TreeItemCollapsibleState,
-        providerParent: BrowserProvider
+        collapsibleState: vscode.TreeItemCollapsibleState
     ) {
         super(label, collapsibleState);
-        this.providerParent = providerParent;
         this.selected = false;
         this.command =  {
             command: 'browserSelection.toggleSelection', 

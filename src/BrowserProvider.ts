@@ -9,6 +9,8 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
 
     private treeBrowser: TreeBrowser[] = [];
 
+    // super class methods
+
     public getChildren(browser?: TreeBrowser): TreeBrowser[] { 
         if(browser) {
             return [];
@@ -21,6 +23,8 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
         return browser;
     }
 
+    // Class methods
+    
     public async createBrowserList() {
         let browserList = await testcafeBrowserTools.getInstallations();
         if(browserList.length <= 0) {
@@ -28,7 +32,7 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
         }
 
         for (const browser in browserList) {
-            this.treeBrowser.push(new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None, this));
+            this.treeBrowser.push(new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None));
         }
     }
 
