@@ -1,6 +1,6 @@
-# testcafe-runner README
+# testlatte README
 
-This is the README for your extension "testcafe-runner". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "testlatte". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

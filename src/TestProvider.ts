@@ -30,7 +30,7 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
                 return treeTests;
             }
 
-            filePath = filePath + "/" + vscode.workspace.getConfiguration('testcafeRunner').get('filePath');
+            filePath = filePath + "/" + vscode.workspace.getConfiguration('testlatte').get('filePath');
             
             let fileListPath = await this.getFileListPath(filePath);
             for (const file of fileListPath) {
@@ -58,7 +58,7 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
             return Promise.resolve(fileListPath);
         }
 
-        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testcafeRunner').get('filePath');
+        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testlatte').get('filePath');
         let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(vscode.workspace.workspaceFolders[0], configuredPath + '**/*.{ts,js}');
         let fileList = await vscode.workspace.findFiles(relativePattern, 'node_modules');
         for (const file of fileList) {

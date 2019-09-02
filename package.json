@@ -1,6 +1,6 @@
 {
-	"name": "testcafe-runner",
-	"displayName": "TestCafe Runner",
+	"name": "testlatte",
+	"displayName": "TestLatte",
 	"description": "",
 	"version": "0.0.1",
 	"engines": {
@@ -73,20 +73,20 @@
 			]
 		},
 		"configuration": {
-			"title": "Testcafe Runner",
+			"title": "TestLatte",
 			"properties": {
-				"testcafeRunner.filePath" : {
-					"type" : "string",
-					"default" : "test/",
+				"testlatte.filePath": {
+					"type": "string",
+					"default": "test/",
 					"description": "Files or directories (separated by a space) from which to search and run the tests."
 				},
-				"testcafeRunner.customArguments" : {
+				"testlatte.customArguments": {
 					"type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "Custom arguments to testcafe command line"
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "Custom arguments to testcafe command line"
 				}
 			}
 		}

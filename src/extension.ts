@@ -27,7 +27,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.workspace.onDidChangeConfiguration(function (change) {
-		if(change.affectsConfiguration('testcafeRunner')) {
+		if(change.affectsConfiguration('testlatte')) {
 			testProvider.refresh();
 		}
 	});

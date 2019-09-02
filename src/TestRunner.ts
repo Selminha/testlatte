@@ -41,7 +41,7 @@ export default class TestRunner {
             testcafeArguments.push(treeTest.label);
         }        
 
-        let configuredCustomArguments = vscode.workspace.getConfiguration("testcafeRunner").get("customArguments");
+        let configuredCustomArguments = vscode.workspace.getConfiguration("testlatte").get("customArguments");
         if(typeof(configuredCustomArguments) === "string") {
             testcafeArguments = testcafeArguments.concat((<string>configuredCustomArguments).split(" "));
         }
