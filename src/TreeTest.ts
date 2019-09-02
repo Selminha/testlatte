@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 export default class TreeTest extends vscode.TreeItem {
 
-    public testCafeData: any;
+    public testCafeData: any = undefined;
     public filepath: string;
         
     constructor(
@@ -40,4 +40,8 @@ export default class TreeTest extends vscode.TreeItem {
             textEditor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
         }
     }     
+
+    public isFixture(): boolean {
+        return (this.testCafeData.tests);
+    }
 }

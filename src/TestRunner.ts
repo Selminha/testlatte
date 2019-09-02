@@ -30,6 +30,17 @@ export default class TestRunner {
 
         let testcafeArguments: string[] = [this.getBrowserArg(), treeTest.filepath];
 
+        if(treeTest.label) {
+            if(treeTest.isFixture()) {
+                testcafeArguments.push("--fixture");
+            }
+            else {
+                testcafeArguments.push("--test");
+            }
+    
+            testcafeArguments.push(treeTest.label);
+        }        
+
         let configuredCustomArguments = vscode.workspace.getConfiguration("testcafeRunner").get("customArguments");
         if(typeof(configuredCustomArguments) === "string") {
             testcafeArguments = testcafeArguments.concat((<string>configuredCustomArguments).split(" "));
