@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
+import TestRunner from './TestRunner';
 
 export async function activate(context: vscode.ExtensionContext) {
 	const browserProvider = new BrowserProvider();
@@ -16,7 +17,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		treeTest.openTest();
 	});
 	vscode.commands.registerCommand('testOutline.runTest', treeTest => {
-		treeTest.runTest();
+		let testRunner: TestRunner = new TestRunner(browserProvider);
+		testRunner.runTest(treeTest);
 	});
 
 	vscode.commands.registerCommand('browserSelection.toggleSelection', function(treeBrowser) {

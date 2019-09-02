@@ -39,23 +39,5 @@ export default class TreeTest extends vscode.TreeItem {
             let range = textEditor.document.lineAt(this.testCafeData.loc.start.line-1).range;
             textEditor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
         }
-    }
-
-    public runTest() {
-        var workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
-        vscode.debug.startDebugging(workspaceFolder, {
-            name: "Run Test Testcafe",
-            request: "launch",
-            type: "node",
-            protocol: "inspector",
-            program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
-            console: "integratedTerminal",
-            cwd: "${workspaceRoot}",
-            args: [
-                "chrome",
-                "${workspaceRoot}"
-            ]
-        });
-    }
-     
+    }     
 }

@@ -34,9 +34,25 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
         for (const browser in browserList) {
             this.treeBrowser.push(new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None));
         }
+
+        // make the first browser the default selection
+        if(this.treeBrowser.length > 0) {
+            this.treeBrowser[0].toggleSelection();
+        }
     }
 
     public refresh() {
         this._onDidChangeTreeData.fire();
+    }
+
+    public getBrowserList(): (string | undefined)[] {
+        let browserList: (string | undefined)[] = [];
+        this.treeBrowser.forEach(element => {
+            if(element.selected) {
+                browserList.push(element.label);  
+            }                 
+        });
+        
+        return browserList;
     }
 }

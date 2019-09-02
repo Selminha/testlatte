@@ -32,8 +32,8 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
 
             filePath = filePath + "/" + vscode.workspace.getConfiguration('testcafeRunner').get('filePath');
             
-            let fileList = this.getFileList(filePath);
-            for (const file of fileList) {
+            let fileListPath = await this.getFileListPath(filePath);
+            for (const file of fileListPath) {
                 let listTest = await this.getTests(file);
                 for (const testCafeData of listTest) {
                     treeTests.push(new TreeTest(testCafeData.name,vscode.TreeItemCollapsibleState.Collapsed, testCafeData, file));
@@ -51,34 +51,21 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
 
     // Class methods
 
-    private getFileList(filePath?: string): string[] {
-        
-        if(filePath === undefined) {
-            return [];
+    private async getFileListPath(filePath?: string): Promise<string[]> {
+        let fileListPath: string[] = [];
+
+        if(!vscode.workspace.workspaceFolders) {
+            return Promise.resolve(fileListPath);
         }
 
-        let fs = require('fs');
-        let path = require('path');
+        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testcafeRunner').get('filePath');
+        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(vscode.workspace.workspaceFolders[0], configuredPath + '**/*.{ts,js}');
+        let fileList = await vscode.workspace.findFiles(relativePattern, 'node_modules');
+        for (const file of fileList) {
+            fileListPath.push(file.fsPath);
+        }
 
-        let filelist: string[] = [];
-
-        fs.readdirSync(filePath).forEach((file: string) => {
-            let extension = path.extname(file);
-
-            // ignore node_modules
-            if(file === 'node_modules') {
-                return filelist;
-            }
-
-            if(fs.statSync(filePath + '/' + file).isDirectory()) {
-                filelist = filelist.concat(this.getFileList(filePath + '/' + file));
-            }
-            else if ((extension === '.ts') || (extension === '.js')){
-                filelist.push(filePath + '/' + file);
-            }            
-        });
-
-        return filelist;
+        return Promise.resolve(fileListPath);
     }
 
     private async getTests(file: string): Promise<any[]> {
