@@ -28,18 +28,6 @@
 		},
 		"commands": [
 			{
-				"command": "nodeDependencies.refreshEntry.example",
-				"title": "Run All",
-				"icon": {
-					"light": "resources/light/run.svg",
-					"dark": "resources/dark/run.svg"
-				}
-			},
-			{
-				"command": "nodeDependencies.addEntry.example",
-				"title": "Test"
-			},
-			{
 				"command": "browserSelection.toggleSelection",
 				"title": "Select"
 			},
@@ -50,18 +38,22 @@
 					"light": "resources/light/run.svg",
 					"dark": "resources/dark/run.svg"
 				}
+			},
+			{
+				"command": "testOutline.runAll",
+				"title": "Run All",
+				"icon": {
+					"light": "resources/light/run.svg",
+					"dark": "resources/dark/run.svg"
+				}
 			}
 		],
 		"menus": {
 			"view/title": [
 				{
-					"command": "nodeDependencies.refreshEntry.example",
+					"command": "testOutline.runAll",
 					"when": "view == testOutline",
 					"group": "navigation"
-				},
-				{
-					"command": "nodeDependencies.addEntry.example",
-					"when": "view == testOutline"
 				}
 			],
 			"view/item/context": [

@@ -20,6 +20,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		testRunner.runTest(treeTest);
 	});
+	vscode.commands.registerCommand('testOutline.runAll', treeTest => {
+		// TODO implement run all tests
+	});
 
 	vscode.commands.registerCommand('browserSelection.toggleSelection', function(treeBrowser) {
 		treeBrowser.toggleSelection();
