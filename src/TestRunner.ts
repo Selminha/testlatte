@@ -26,7 +26,15 @@ export default class TestRunner {
     }
 
     public runTest(treeTest: Treetest) {    
-        var workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
+        let workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
+
+        let testcafeArguments: string[] = [this.getBrowserArg(), treeTest.filepath];
+
+        let configuredCustomArguments = vscode.workspace.getConfiguration("testcafeRunner").get("customArguments");
+        if(typeof(configuredCustomArguments) === "string") {
+            testcafeArguments = testcafeArguments.concat((<string>configuredCustomArguments).split(" "));
+        }
+
         vscode.debug.startDebugging(workspaceFolder, {
             name: "Run Test Testcafe",
             request: "launch",
@@ -35,10 +43,7 @@ export default class TestRunner {
             program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
             console: "integratedTerminal",
             cwd: "${workspaceRoot}",
-            args: [
-                this.getBrowserArg(),
-                treeTest.filepath
-            ]
+            args: testcafeArguments
         });
     }
 }

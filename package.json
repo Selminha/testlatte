@@ -79,6 +79,14 @@
 					"type" : "string",
 					"default" : "test/",
 					"description": "Files or directories (separated by a space) from which to search and run the tests."
+				},
+				"testcafeRunner.customArguments" : {
+					"type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Custom arguments to testcafe command line"
 				}
 			}
 		}
