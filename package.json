@@ -42,16 +42,16 @@
 				"command": "testOutline.runTest",
 				"title": "Run Test",
 				"icon": {
-					"light": "resources/light/run.svg",
-					"dark": "resources/dark/run.svg"
+					"light": "resources/light/run.png",
+					"dark": "resources/dark/run.png"
 				}
 			},
 			{
 				"command": "testOutline.runAll",
 				"title": "Run All",
 				"icon": {
-					"light": "resources/light/run.svg",
-					"dark": "resources/dark/run.svg"
+					"light": "resources/light/run.png",
+					"dark": "resources/dark/run.png"
 				}
 			}
 		],
