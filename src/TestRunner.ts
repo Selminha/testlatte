@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import BrowserProvider from './BrowserProvider';
 import Treetest from './TreeTest';
+import Util from './Util';
 
 export default class TestRunner {
     private browserList: (string | undefined)[];
@@ -25,9 +26,27 @@ export default class TestRunner {
         return browserArg;
     }
 
-    public runTest(treeTest: Treetest) {    
+    private execute(args: string[]) {
         let workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
 
+        let configuredCustomArguments = vscode.workspace.getConfiguration("testlatte").get("customArguments");
+        if(typeof(configuredCustomArguments) === "string") {
+            args = args.concat((<string>configuredCustomArguments).split(" "));
+        }
+        
+        vscode.debug.startDebugging(workspaceFolder, {
+            name: "Run Test Testcafe",
+            request: "launch",
+            type: "node",
+            protocol: "inspector",
+            program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
+            console: "integratedTerminal",
+            cwd: "${workspaceRoot}",
+            args: args
+        });
+    }
+
+    public runTest(treeTest: Treetest) {    
         let testcafeArguments: string[] = [this.getBrowserArg(), treeTest.filepath];
 
         if(treeTest.label) {
@@ -39,22 +58,14 @@ export default class TestRunner {
             }
     
             testcafeArguments.push(treeTest.label);
-        }        
+        }         
+        
+        this.execute(testcafeArguments);
+    }
 
-        let configuredCustomArguments = vscode.workspace.getConfiguration("testlatte").get("customArguments");
-        if(typeof(configuredCustomArguments) === "string") {
-            testcafeArguments = testcafeArguments.concat((<string>configuredCustomArguments).split(" "));
-        }
+    public runAll() {
+        let testcafeArguments: string[] = [this.getBrowserArg(), Util.getConfiguredFilePath()];
 
-        vscode.debug.startDebugging(workspaceFolder, {
-            name: "Run Test Testcafe",
-            request: "launch",
-            type: "node",
-            protocol: "inspector",
-            program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
-            console: "integratedTerminal",
-            cwd: "${workspaceRoot}",
-            args: testcafeArguments
-        });
+        this.execute(testcafeArguments);
     }
 }

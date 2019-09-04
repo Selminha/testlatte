@@ -20,6 +20,11 @@ TestLatte allows you to debug your TestCafé tests on visual studio code.
 
 ![Run Test](./images/run-test.png)
 
+#### Debug all tests clicking on the run all icon.
+
+![Run Test](./images/run-all.png)
+
+
 ## Requirements
 
 You need to install [TestCafé](https://github.com/DevExpress/testcafe) in your project as a local package. 

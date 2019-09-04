@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import TreeTest from './TreeTest';
+import Util from './Util';
 
 export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
     private _onDidChangeTreeData: vscode.EventEmitter<TreeTest> = new vscode.EventEmitter<TreeTest>();
@@ -25,12 +26,7 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
             });
         }
         else {
-            let filePath: string | undefined = vscode.workspace.rootPath;
-            if(filePath === undefined) {
-                return treeTests;
-            }
-
-            filePath = filePath + "/" + vscode.workspace.getConfiguration('testlatte').get('filePath');
+            let filePath: string = Util.getConfiguredFilePath();
             
             let fileListPath = await this.getFileListPath(filePath);
             for (const file of fileListPath) {
