@@ -2,6 +2,7 @@
 	"name": "testlatte",
 	"displayName": "TestLatte",
 	"description": "Run your TestCafé tests in the Sidebar of Visual Studio Code",
+	"publisher": "sshimono",
 	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.34.0"
