@@ -112,5 +112,12 @@
 		"fs": "0.0.1-security",
 		"testcafe": "^1.4.1",
 		"testcafe-browser-tools": "^1.6.8"
-	}
+	},
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/Selminha/testlatte"
+    },
+    "bugs": {
+        "url": "https://github.com/Selminha/testlatte/issues"
+    }
 }
