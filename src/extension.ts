@@ -17,6 +17,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		treeTest.openTest();
 	});
 	vscode.commands.registerCommand('testOutline.runTest', treeTest => {
+		treeTest.openTest();
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		testRunner.runTest(treeTest);
 	});

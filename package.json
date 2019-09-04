@@ -1,16 +1,23 @@
 {
 	"name": "testlatte",
 	"displayName": "TestLatte",
-	"description": "",
+	"description": "Run your TestCafé tests in the Sidebar of Visual Studio Code",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.34.0"
 	},
 	"categories": [
+		"Debuggers",
 		"Other"
 	],
 	"activationEvents": [
 		"*"
+	],
+	"keywords": [
+		"TestCafe",
+		"TestCafé",
+		"Test",
+		"Runner"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

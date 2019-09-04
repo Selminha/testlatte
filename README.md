@@ -1,14 +1,12 @@
-# testlatte README
+# TestLatte for Visual Studio Code
 
-This is the README for your extension "testlatte". After writing up a brief description, we recommend including the following sections.
+TestLatte allows you to debug your TestCafé tests on visual studio code.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Show a list of installed browsers and allow you to select one or more browsers to run your tests.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
+\!\[Browser List\]\(./images/browser-list.png\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
