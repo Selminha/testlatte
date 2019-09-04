@@ -5,6 +5,10 @@ import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
 
+// TODO activate extension only when find tests
+// TODO bundle extension to improve installation time
+// TODO change extension to use visual studio test api ????? (just a possibility)
+
 export async function activate(context: vscode.ExtensionContext) {
 	const browserProvider = new BrowserProvider();
 	await browserProvider.createBrowserList();
