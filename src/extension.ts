@@ -7,6 +7,7 @@ import TestRunner from './TestRunner';
 
 // TODO activate extension only when find tests
 // TODO bundle extension to improve installation time
+// TODO make it work with multi root workspace
 // TODO change extension to use visual studio test api ????? (just a possibility)
 
 export async function activate(context: vscode.ExtensionContext) {
