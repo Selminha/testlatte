@@ -61,7 +61,7 @@ export default class TreeTest extends vscode.TreeItem {
 
     private createChildrenList(testCafeData: any) {
         for (const testData of testCafeData.tests) {
-            this._testChildren.push(new TreeTest(testData.name, vscode.TreeItemCollapsibleState.None, testData, testData.filepath));
+            this._testChildren.push(new TreeTest(testData.name, vscode.TreeItemCollapsibleState.None, testData, this._filepath));
         }
     }
 }
