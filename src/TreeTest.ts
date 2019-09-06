@@ -2,8 +2,17 @@ import * as vscode from 'vscode';
 
 export default class TreeTest extends vscode.TreeItem {
 
-    public testCafeData: any = undefined;
-    public filepath: string;
+    private _filepath: string;
+    private _startLine: number;
+    private _testChildren: TreeTest[];
+
+    public get filepath(): string {
+        return this._filepath;
+    }
+
+    public get testChildren(): TreeTest[] {
+        return this._testChildren;
+    }
         
     constructor(
         label: string, 
@@ -12,13 +21,18 @@ export default class TreeTest extends vscode.TreeItem {
         filepath: string
     ) {
         super(label, collapsibleState);
-        this.testCafeData = testCafeData;
-        this.filepath = filepath;
         this.command =  {
             command: 'testOutline.openTest', 
             title: 'Open', 
             arguments: [this, ]
         };
+
+        this._filepath = filepath;
+        this._startLine = testCafeData.loc.start.line;
+        this._testChildren = [];
+        if(testCafeData.tests) {
+            this.createChildrenList(testCafeData);
+        }        
 
         this.setCursorPosition.bind(this);
     }
@@ -33,15 +47,21 @@ export default class TreeTest extends vscode.TreeItem {
 
     public setCursorPosition(textEditor: vscode.TextEditor) {
         if(textEditor) {
-            let position = new vscode.Position(this.testCafeData.loc.start.line,0);
+            let position = new vscode.Position(this._startLine,0);
             let selection = new vscode.Selection(position, position);
             textEditor.selection = selection;
-            let range = textEditor.document.lineAt(this.testCafeData.loc.start.line-1).range;
+            let range = textEditor.document.lineAt(this._startLine-1).range;
             textEditor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
         }
     }     
 
     public isFixture(): boolean {
-        return (this.testCafeData.tests);
+        return (this._testChildren.length > 0);
+    }
+
+    private createChildrenList(testCafeData: any) {
+        for (const testData of testCafeData.tests) {
+            this._testChildren.push(new TreeTest(testData.name, vscode.TreeItemCollapsibleState.None, testData, testData.filepath));
+        }
     }
 }

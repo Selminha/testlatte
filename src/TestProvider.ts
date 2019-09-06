@@ -16,14 +16,12 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
         let treeTests: TreeTest[] = [];
         
         if (test) {
-            if (test.testCafeData.tests === undefined) {
+            if (!test.isFixture()) {
                 // nothing to return
-                return treeTests;
+                return Promise.resolve([] as TreeTest[]);
             }
 
-            test.testCafeData.tests.forEach(function (testCafeData: any) {
-                treeTests.push(new TreeTest(testCafeData.name, vscode.TreeItemCollapsibleState.None, testCafeData, test.filepath));
-            });
+            return Promise.resolve(test.testChildren);
         }
         else {
             let filePath: string = Util.getConfiguredFilePath();
