@@ -1,9 +1,12 @@
 # Change Log
 
-All notable changes to the "TestLatte" extension will be documented in this file.
+## 1.1.0 - September 04, 2019
+- Added refresh button to test list
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 1.0.0 - September 04, 2019
+- Initial release
 
 ## [Unreleased]
 
-- Initial release
+- Activate extension only when find tests
+- Make it work with multi root workspace
