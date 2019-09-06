@@ -3,7 +3,7 @@
 	"displayName": "TestLatte",
 	"description": "Run your TestCafé tests in the Sidebar of Visual Studio Code",
 	"publisher": "sshimono",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"engines": {
 		"vscode": "^1.34.0"
 	},
@@ -54,12 +54,25 @@
 					"light": "resources/light/run.png",
 					"dark": "resources/dark/run.png"
 				}
+			},
+			{
+				"command": "testOutline.refresh",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.png",
+					"dark": "resources/dark/refresh.png"
+				}
 			}
 		],
 		"menus": {
 			"view/title": [
 				{
 					"command": "testOutline.runAll",
+					"when": "view == testOutline",
+					"group": "navigation"
+				},
+				{
+					"command": "testOutline.refresh",
 					"when": "view == testOutline",
 					"group": "navigation"
 				}
