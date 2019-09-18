@@ -3,7 +3,7 @@
 	"displayName": "TestLatte",
 	"description": "Run your TestCafé tests in the Sidebar of Visual Studio Code",
 	"publisher": "sshimono",
-	"version": "1.1.2",
+	"version": "1.1.3",
 	"icon": "images/icon.png",
 	"engines": {
 		"vscode": "^1.34.0"
