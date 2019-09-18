@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.3 - September 17, 2019
+- Added extension icon.
+
 ## 1.1.2 - September 06, 2019
 - Write change log.
 
