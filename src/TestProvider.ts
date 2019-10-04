@@ -3,6 +3,7 @@ import TreeTest from './TreeTest';
 import Util from './Util';
 
 export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
+    private testList: TreeTest[] = [];
     private _onDidChangeTreeData: vscode.EventEmitter<TreeTest> = new vscode.EventEmitter<TreeTest>();
     readonly onDidChangeTreeData: vscode.Event<TreeTest> = this._onDidChangeTreeData.event;
 
@@ -12,9 +13,7 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
     // super class methods
 
     public async getChildren(test?: TreeTest): Promise<TreeTest[]> {      
-  
-        let treeTests: TreeTest[] = [];
-        
+
         if (test) {
             if (!test.isFixture()) {
                 // nothing to return
@@ -23,19 +22,8 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
 
             return Promise.resolve(test.testChildren);
         }
-        else {
-            let filePath: string = Util.getConfiguredFilePath();
-            
-            let fileListPath = await this.getFileListPath(filePath);
-            for (const file of fileListPath) {
-                let listTest = await this.getTests(file);
-                for (const testCafeData of listTest) {
-                    treeTests.push(new TreeTest(testCafeData.name,vscode.TreeItemCollapsibleState.Collapsed, testCafeData, file));
-                }
-            }
-        }    
-        
-        return Promise.resolve(treeTests);
+                
+        return Promise.resolve(this.testList);
  
     }
   
@@ -44,6 +32,21 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
     }
 
     // Class methods
+    private async getTestList(): Promise<TreeTest[]> {
+        let treeTestsList: TreeTest[] = [];
+
+        let filePath: string = Util.getConfiguredFilePath();
+
+        let fileListPath = await this.getFileListPath(filePath);
+        for (const file of fileListPath) {
+            let listTest = await this.getFileTests(file);
+            for (const testCafeData of listTest) {
+                treeTestsList.push(new TreeTest(testCafeData.name,vscode.TreeItemCollapsibleState.Collapsed, testCafeData, file));
+            }
+        }
+
+        return Promise.resolve(treeTestsList);
+    }
 
     private async getFileListPath(filePath?: string): Promise<string[]> {
         let fileListPath: string[] = [];
@@ -62,7 +65,7 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
         return Promise.resolve(fileListPath);
     }
 
-    private async getTests(file: string): Promise<any[]> {
+    private async getFileTests(file: string): Promise<any[]> {
         let embeddingUtils = require('testcafe').embeddingUtils;
         let testList;
         let path = require('path');
@@ -81,8 +84,28 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
         return testList;
     }
 
+    private async fillTestList() {
+        this.testList = await this.getTestList();
+    }
+
+    private setPanelVisibility() {
+        if(this.testList.length > 0) {
+            vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
+        }
+        else {
+            vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);
+        }
+    }
+
     public refresh () {
+        this.fillTestList();
+        this.setPanelVisibility();
         this._onDidChangeTreeData.fire();
+    }
+
+    public startProvider() {
+        this.fillTestList();
+        this.setPanelVisibility();
     }
 }
 
