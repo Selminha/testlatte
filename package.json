@@ -27,13 +27,11 @@
 			"test": [
 				{
 					"id": "testOutline",
-					"name": "TestCafe Test List",
-					"when": "foundTestcafeTests"
+					"name": "TestCafe Test List"
 				},
 				{
 					"id": "browserSelection",
-					"name": "Select Browser",
-					"when": "foundTestcafeTests"
+					"name": "Select Browser"
 				}
 			]
 		},

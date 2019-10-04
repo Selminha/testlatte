@@ -97,14 +97,14 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
         }
     }
 
-    public refresh () {
-        this.fillTestList();
+    public async refresh () {
+        await this.fillTestList();
         this.setPanelVisibility();
         this._onDidChangeTreeData.fire();
     }
 
-    public startProvider() {
-        this.fillTestList();
+    public async startProvider() {
+        await this.fillTestList();
         this.setPanelVisibility();
     }
 }

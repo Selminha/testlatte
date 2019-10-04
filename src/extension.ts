@@ -6,9 +6,8 @@ import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
 
 // TODO activate extension only when find tests
-// TODO bundle extension to improve installation time
 // TODO make it work with multi root workspace
-// TODO change extension to use visual studio test api ????? (just a possibility)
+// TODO add exclude folder configuration
 
 export async function activate(context: vscode.ExtensionContext) {
 	const browserProvider = new BrowserProvider();
@@ -45,6 +44,11 @@ export async function activate(context: vscode.ExtensionContext) {
 			testProvider.refresh();
 		}
 	});
+
+	// let fileSystemWatcher: vscode.FileSystemWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(vscode.workspace.rootPath, *.*), )
+	// vscode.workspace.onDidSaveTextDocument(function() {
+	// 	testProvider.refresh();
+	// });
 }
 
 
