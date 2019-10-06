@@ -49,6 +49,14 @@
 				}
 			},
 			{
+				"command": "testOutline.debugTest",
+				"title": "Debug Test",
+				"icon": {
+					"light": "resources/light/debug.png",
+					"dark": "resources/dark/debug.png"
+				}
+			},
+			{
 				"command": "testOutline.runAll",
 				"title": "Run All",
 				"icon": {
@@ -79,6 +87,11 @@
 				}
 			],
 			"view/item/context": [
+				{
+					"command": "testOutline.debugTest",
+					"when": "view == testOutline",
+					"group": "inline"
+				},
 				{
 					"command": "testOutline.runTest",
 					"when": "view == testOutline",

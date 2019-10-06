@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as child_process from 'child_process'; 
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
@@ -15,11 +16,16 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.window.registerTreeDataProvider('browserSelection', browserProvider);
 	
 	const testProvider = new TestProvider();
-	testProvider.startProvider();
+	await testProvider.startProvider();
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
 
 	vscode.commands.registerCommand('testOutline.openTest', treeTest => {
 		treeTest.openTest();
+	});
+	vscode.commands.registerCommand('testOutline.debugTest', treeTest => {
+		treeTest.openTest();
+		let testRunner: TestRunner = new TestRunner(browserProvider);
+		testRunner.debugTest(treeTest);
 	});
 	vscode.commands.registerCommand('testOutline.runTest', treeTest => {
 		treeTest.openTest();

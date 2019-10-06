@@ -26,14 +26,88 @@ export default class TestRunner {
         return browserArg;
     }
 
-    private execute(args: string[]) {
-        let workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
+    private getTestArguments(treeTest: Treetest): string[] {
+        let testArguments: string[] = [treeTest.filepath];
+
+        if(treeTest.label) {
+            if(treeTest.isFixture()) {
+                testArguments.push("--fixture");
+            }
+            else {
+                testArguments.push("--test");
+            }
+
+            testArguments.push(treeTest.label);
+        }     
+
+        return testArguments;
+    }
+
+    private getCustomArguments() : string[] {
+        let customArguments: string[] = [];
 
         let configuredCustomArguments = vscode.workspace.getConfiguration("testlatte").get("customArguments");
         if(typeof(configuredCustomArguments) === "string") {
-            args = args.concat((<string>configuredCustomArguments).split(" "));
+            customArguments = customArguments.concat((<string>configuredCustomArguments).split(" "));
         }
-        
+
+        return customArguments;
+    }
+
+    private executeTest(args: string) {
+        let testcafeTerminal: vscode.Terminal | undefined = undefined;
+        for (const terminal of vscode.window.terminals) {
+            if(terminal.name === "Testcafe") { 
+                testcafeTerminal = terminal;
+            }  
+        }
+
+        if(!testcafeTerminal) {
+            testcafeTerminal = vscode.window.createTerminal('Testcafe');
+        }
+
+        let commandLine: string = 'npx --no-install testcafe ' + args;
+
+        testcafeTerminal.show();
+        testcafeTerminal.sendText(commandLine, true);
+    }
+
+    public runTest(treeTest: Treetest) {    
+        let listArguments: string[] = [this.getBrowserArg()];
+        listArguments = listArguments.concat(this.getTestArguments(treeTest));
+        listArguments = listArguments.concat(this.getCustomArguments());
+
+        let testArguments:string = listArguments.map(i => {
+            if(i.indexOf(' ') >= 0) {
+                return (`"${i}"`);
+            }
+            return (i);            
+        }).join(' ');
+
+        this.executeTest(testArguments);        
+    }
+
+    public runAll() {
+        let testcafeArguments: string[] = [this.getBrowserArg(), Util.getConfiguredFilePath()];
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
+
+        let testArguments:string = testcafeArguments.map(i => {
+            if(i.indexOf(' ') >= 0) {
+                return (`"${i}"`);
+            }
+            return (i);            
+        }).join(' ');
+
+        this.executeTest(testArguments);  
+    }
+
+    public debugTest(treeTest: Treetest) { 
+        let workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
+
+        let testcafeArguments: string[] = [this.getBrowserArg()];
+        testcafeArguments = testcafeArguments.concat(this.getTestArguments(treeTest));
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
+
         vscode.debug.startDebugging(workspaceFolder, {
             name: "Run Test Testcafe",
             request: "launch",
@@ -42,30 +116,7 @@ export default class TestRunner {
             program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
             console: "integratedTerminal",
             cwd: "${workspaceRoot}",
-            args: args
+            args: testcafeArguments
         });
-    }
-
-    public runTest(treeTest: Treetest) {    
-        let testcafeArguments: string[] = [this.getBrowserArg(), treeTest.filepath];
-
-        if(treeTest.label) {
-            if(treeTest.isFixture()) {
-                testcafeArguments.push("--fixture");
-            }
-            else {
-                testcafeArguments.push("--test");
-            }
-    
-            testcafeArguments.push(treeTest.label);
-        }         
-        
-        this.execute(testcafeArguments);
-    }
-
-    public runAll() {
-        let testcafeArguments: string[] = [this.getBrowserArg(), Util.getConfiguredFilePath()];
-
-        this.execute(testcafeArguments);
     }
 }
