@@ -72,6 +72,21 @@ export default class TestRunner {
         testcafeTerminal.sendText(commandLine, true);
     }
 
+    private executeDebug(testArguments: string[]) {
+        let workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
+
+        vscode.debug.startDebugging(workspaceFolder, {
+            name: "Run Test Testcafe",
+            request: "launch",
+            type: "node",
+            protocol: "inspector",
+            program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
+            console: "integratedTerminal",
+            cwd: "${workspaceRoot}",
+            args: testArguments
+        });
+    }
+
     public runTest(treeTest: Treetest) {    
         let listArguments: string[] = [this.getBrowserArg()];
         listArguments = listArguments.concat(this.getTestArguments(treeTest));
@@ -102,21 +117,17 @@ export default class TestRunner {
     }
 
     public debugTest(treeTest: Treetest) { 
-        let workspaceFolder = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0] : undefined;
-
         let testcafeArguments: string[] = [this.getBrowserArg()];
         testcafeArguments = testcafeArguments.concat(this.getTestArguments(treeTest));
         testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
 
-        vscode.debug.startDebugging(workspaceFolder, {
-            name: "Run Test Testcafe",
-            request: "launch",
-            type: "node",
-            protocol: "inspector",
-            program: "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
-            console: "integratedTerminal",
-            cwd: "${workspaceRoot}",
-            args: testcafeArguments
-        });
+        this.executeDebug(testcafeArguments);
+    }
+
+    public debugAll() {
+        let testcafeArguments: string[] = [this.getBrowserArg(), Util.getConfiguredFilePath()];
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
+
+        this.executeDebug(testcafeArguments);
     }
 }

@@ -65,6 +65,14 @@
 				}
 			},
 			{
+				"command": "testOutline.debugAll",
+				"title": "Debug All",
+				"icon": {
+					"light": "resources/light/debug.png",
+					"dark": "resources/dark/debug.png"
+				}
+			},
+			{
 				"command": "testOutline.refresh",
 				"title": "Refresh",
 				"icon": {
@@ -76,14 +84,19 @@
 		"menus": {
 			"view/title": [
 				{
-					"command": "testOutline.runAll",
-					"when": "view == testOutline",
-					"group": "navigation"
-				},
-				{
 					"command": "testOutline.refresh",
 					"when": "view == testOutline",
-					"group": "navigation"
+					"group": "navigation@1"
+				},
+				{
+					"command": "testOutline.debugAll",
+					"when": "view == testOutline",
+					"group": "navigation@2"
+				},
+				{
+					"command": "testOutline.runAll",
+					"when": "view == testOutline",
+					"group": "navigation@3"
 				}
 			],
 			"view/item/context": [

@@ -32,6 +32,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		testRunner.runTest(treeTest);
 	});
+	vscode.commands.registerCommand('testOutline.debugAll', () => {
+		let testRunner: TestRunner = new TestRunner(browserProvider);
+		testRunner.debugAll();
+	});
 	vscode.commands.registerCommand('testOutline.runAll', () => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		testRunner.runAll();
