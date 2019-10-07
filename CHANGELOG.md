@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0 - October 07, 2019
+- Added feature that allow run or debug tests.
+- Updated icons design.
+
 ## 1.1.4 - September 17, 2019
 - Changed extension icon format.
 

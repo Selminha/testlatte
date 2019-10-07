@@ -16,13 +16,18 @@ TestLatte allows you to debug your TestCafé tests on visual studio code.
 
 ![Navigate](./images/navigate.png)
 
-#### Debug your test or fixture clicking on the run icon.
+#### Debug or Run your test or fixture clicking on the debug icon or on the run icon.
+![Debug Test](./images/debug-test.png)
+
 
 ![Run Test](./images/run-test.png)
 
-#### Debug all tests clicking on the run all icon.
+#### Debug or Run all tests clicking on the debug all icon or on the run all icon.
 
-![Run Test](./images/run-all.png)
+![Debug All](./images/debug-all.png)
+
+
+![Run All](./images/run-all.png)
 
 
 ## Requirements
