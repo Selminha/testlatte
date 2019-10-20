@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.2.1 - October 20, 2019
+- Fix "Opening Terminal on the wrong directory"
+
 ## 1.2.0 - October 07, 2019
 - Added feature that allow run or debug tests.
 - Updated icons design.
