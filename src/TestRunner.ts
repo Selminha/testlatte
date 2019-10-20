@@ -63,7 +63,12 @@ export default class TestRunner {
         }
 
         if(!testcafeTerminal) {
-            testcafeTerminal = vscode.window.createTerminal('Testcafe');
+            let terminalOptions: vscode.TerminalOptions = {
+                cwd: vscode.workspace.rootPath,
+                name: 'Testcafe'
+            };
+
+            testcafeTerminal = vscode.window.createTerminal(terminalOptions);
         }
 
         let commandLine: string = 'npx --no-install testcafe ' + args;
