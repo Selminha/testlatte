@@ -1,6 +1,6 @@
 # TestLatte for Visual Studio Code
 
-TestLatte allows you to debug your TestCafé tests on visual studio code.
+TestLatte allows you to Debug or Run your TestCafé tests on visual studio code.
 
 ## Features
 
