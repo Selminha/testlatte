@@ -29,3 +29,5 @@
 
 - Activate extension only when find tests
 - Make it work with multi root workspace
+- Add support to browser options like headless mode and user profile
+- Add support to portable browser
