@@ -12,7 +12,8 @@ import TestRunner from './TestRunner';
 
 export async function activate(context: vscode.ExtensionContext) {
 	const browserProvider = new BrowserProvider();
-	await browserProvider.createBrowserList();
+	await browserProvider.createBrowserList(context.workspaceState.get("SelectedBrowserList"));
+	context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
 	vscode.window.registerTreeDataProvider('browserSelection', browserProvider);
 	
 	const testProvider = new TestProvider();
@@ -47,6 +48,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('browserSelection.toggleSelection', function(treeBrowser) {
 		treeBrowser.toggleSelection();
 		browserProvider.refresh();
+		context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
 	});
 
 	vscode.workspace.onDidChangeConfiguration(function (change) {
