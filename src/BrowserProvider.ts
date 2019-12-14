@@ -32,7 +32,7 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
         }
 
         for (const browser in browserList) {
-            let treeItem: TreeBrowser = new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None)
+            let treeItem: TreeBrowser = new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None);
             if(selectedBrowser && selectedBrowser.find(element => element === browser)) {
                 treeItem.toggleSelection();
             }

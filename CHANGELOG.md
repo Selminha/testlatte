@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.3.0 - December 14, 2019
+- Added "save of selected browsers by workspace"
+    Now it will recover the last selected browsers according to the workspace
+
 ## 1.2.1 - October 20, 2019
 - Fix "Opening Terminal on the wrong directory"
 
