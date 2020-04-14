@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.3.1 - April 13, 2020
+- Updated dependencies
+
 ## 1.3.0 - December 14, 2019
 - Added "store selected browsers by workspace"
     Now it will recover the last selected browsers according to the workspace
