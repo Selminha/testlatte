@@ -6,11 +6,28 @@ import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
 
-// TODO activate extension only when find tests
 // TODO make it work with multi root workspace
 // TODO add exclude folder configuration
 
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
+async function setPanelVisibility() {
+	try {
+		const { stdout, stderr } = await exec('npm ls testcafe', { cwd: vscode.workspace.rootPath });
+		// if it doesnt throw an error, testcafe was found
+		vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
+	} catch (e) {
+		vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);
+	}
+}
+
 export async function activate(context: vscode.ExtensionContext) {
+
+	console.log('iniciado');
+
+	setPanelVisibility();
+	
 	const browserProvider = new BrowserProvider();
 	await browserProvider.createBrowserList(context.workspaceState.get("SelectedBrowserList"));
 	context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
@@ -57,10 +74,14 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// let fileSystemWatcher: vscode.FileSystemWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(vscode.workspace.rootPath, *.*), )
-	// vscode.workspace.onDidSaveTextDocument(function() {
-	// 	testProvider.refresh();
-	// });
+	if(vscode.workspace.rootPath !== undefined) {
+		let fileSystemWatcher: vscode.FileSystemWatcher = vscode.workspace.createFileSystemWatcher(
+			new vscode.RelativePattern(vscode.workspace.rootPath, "**/package.json"), );
+
+		fileSystemWatcher.onDidChange(function() {
+			setPanelVisibility();
+		});
+	}
 }
 
 

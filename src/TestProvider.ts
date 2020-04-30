@@ -88,24 +88,13 @@ export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
         this.testList = await this.getTestList();
     }
 
-    private setPanelVisibility() {
-        if(this.testList.length > 0) {
-            vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
-        }
-        else {
-            vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);
-        }
-    }
-
     public async refresh () {
         await this.fillTestList();
-        this.setPanelVisibility();
         this._onDidChangeTreeData.fire();
     }
 
     public async startProvider() {
         await this.fillTestList();
-        this.setPanelVisibility();
     }
 }
 
