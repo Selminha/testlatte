@@ -24,8 +24,6 @@ async function setPanelVisibility() {
 
 export async function activate(context: vscode.ExtensionContext) {
 
-	console.log('iniciado');
-
 	setPanelVisibility();
 	
 	const browserProvider = new BrowserProvider();
