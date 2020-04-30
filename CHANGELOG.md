@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.4.0 - April 30, 2020
+- Changed to show "Select Browser" and "TestCafe Test List" only when testcafe is locally installed.
+
 ## 1.3.1 - April 13, 2020
 - Updated dependencies
 
@@ -34,7 +37,6 @@
 
 ## [Unreleased]
 
-- Activate extension only when find tests
 - Make it work with multi root workspace
 - Add support to browser options like headless mode and user profile
 - Add support to portable browser
