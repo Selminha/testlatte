@@ -45,42 +45,27 @@
 			{
 				"command": "testOutline.runTest",
 				"title": "Run Test",
-				"icon": {
-					"light": "resources/light/run.png",
-					"dark": "resources/dark/run.png"
-				}
+				"icon": "$(play)"
 			},
 			{
 				"command": "testOutline.debugTest",
 				"title": "Debug Test",
-				"icon": {
-					"light": "resources/light/debug.png",
-					"dark": "resources/dark/debug.png"
-				}
+				"icon": "$(debug-alt)"
 			},
 			{
 				"command": "testOutline.runAll",
 				"title": "Run All",
-				"icon": {
-					"light": "resources/light/run.png",
-					"dark": "resources/dark/run.png"
-				}
+				"icon": "$(run-all)"
 			},
 			{
 				"command": "testOutline.debugAll",
 				"title": "Debug All",
-				"icon": {
-					"light": "resources/light/debug.png",
-					"dark": "resources/dark/debug.png"
-				}
+				"icon": "$(debug-alt)"
 			},
 			{
 				"command": "testOutline.refresh",
 				"title": "Refresh",
-				"icon": {
-					"light": "resources/light/refresh.png",
-					"dark": "resources/dark/refresh.png"
-				}
+				"icon": "$(refresh)"
 			}
 		],
 		"menus": {

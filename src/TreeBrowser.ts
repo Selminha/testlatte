@@ -4,39 +4,35 @@ import BrowserProvider from './BrowserProvider';
 
 export default class TreeBrowser extends vscode.TreeItem {
     
-    private selectedIconPath = {
-        light: path.join(__filename, '..', '..', 'resources', 'light', 'icons8-caixa-de-seleção-marcada-24.png'),
-		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'icons8-caixa-de-seleção-marcada-24.png')
-    };
-
-    private notSelectedIconPath = {
-        light: path.join(__filename, '..', '..', 'resources', 'light', 'icons8-caixa-de-seleção-desmarcada-24.png'),
-		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'icons8-caixa-de-seleção-desmarcada-24.png')
-    };
-
     public selected: boolean;
-    public iconPath = this.notSelectedIconPath;  
+    private selectedIcon: vscode.ThemeIcon;  
+    private notSelectedIcon: vscode.ThemeIcon;
 
     constructor(
         label: string, 
         collapsibleState: vscode.TreeItemCollapsibleState
     ) {
         super(label, collapsibleState);
+        this.selectedIcon = new vscode.ThemeIcon('check');
+        this.notSelectedIcon = new vscode.ThemeIcon('circle-slash');
+
         this.selected = false;
         this.command =  {
             command: 'browserSelection.toggleSelection', 
             title: 'Select', 
             arguments: [this, ]
         };
+        
+        this.iconPath  = this.notSelectedIcon;
     }
 
     public toggleSelection() {
         this.selected = !this.selected;
         if(this.selected) {
-            this.iconPath = this.selectedIconPath;
+            this.iconPath = this.selectedIcon;
         }
         else {
-            this.iconPath = this.notSelectedIconPath;
+            this.iconPath = this.notSelectedIcon;
         }
     }
 }
