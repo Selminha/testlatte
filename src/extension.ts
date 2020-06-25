@@ -6,20 +6,34 @@ import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
 
-// TODO make it work with multi root workspace
 // TODO add exclude folder configuration
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-async function setPanelVisibility() {
+async function isTestcafeInstalled(path: string) {
 	try {
-		const { stdout, stderr } = await exec('npm ls testcafe', { cwd: vscode.workspace.rootPath });
-		// if it doesnt throw an error, testcafe was found
-		vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
-	} catch (e) {
-		vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);
+		const { stdout, stderr } = await exec('npm ls testcafe', { cwd: path });
+		return true;
 	}
+	catch(e) {
+		return false;
+	}
+}
+
+async function setPanelVisibility() {
+	if(vscode.workspace.workspaceFolders) {
+		for (const folder of vscode.workspace.workspaceFolders) {
+			if(await isTestcafeInstalled(folder.uri.fsPath)) {
+				// if found at least one folder with testcafe installed activate the extension
+				vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
+				return;
+			} 
+		}
+	}
+
+	// If there is no folders or testcafe is not installed do not activate extension
+	vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);
 }
 
 export async function activate(context: vscode.ExtensionContext) {
