@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
 
-export default class TreeTest extends vscode.TreeItem {
+export default class TestItem extends vscode.TreeItem {
 
     private _filepath: string;
     private _startLine: number;
-    private _testChildren: TreeTest[];
+    private _testChildren: TestItem[];
 
     public get filepath(): string {
         return this._filepath;
     }
 
-    public get testChildren(): TreeTest[] {
+    public get testChildren(): TestItem[] {
         return this._testChildren;
     }
         
@@ -61,7 +61,7 @@ export default class TreeTest extends vscode.TreeItem {
 
     private createChildrenList(testCafeData: any) {
         for (const testData of testCafeData.tests) {
-            this._testChildren.push(new TreeTest(testData.name, vscode.TreeItemCollapsibleState.None, testData, this._filepath));
+            this._testChildren.push(new TestItem(testData.name, vscode.TreeItemCollapsibleState.None, testData, this._filepath));
         }
     }
 }

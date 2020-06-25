@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import BrowserProvider from './BrowserProvider';
-import Treetest from './TreeTest';
+import TestItem from './TestItem';
 import Util from './Util';
 
 export default class TestRunner {
@@ -26,7 +26,7 @@ export default class TestRunner {
         return browserArg;
     }
 
-    private getTestArguments(treeTest: Treetest): string[] {
+    private getTestArguments(treeTest: TestItem): string[] {
         let testArguments: string[] = [treeTest.filepath];
 
         if(treeTest.label) {
@@ -92,7 +92,7 @@ export default class TestRunner {
         });
     }
 
-    public runTest(treeTest: Treetest) {    
+    public runTest(treeTest: TestItem) {    
         let listArguments: string[] = [this.getBrowserArg()];
         listArguments = listArguments.concat(this.getTestArguments(treeTest));
         listArguments = listArguments.concat(this.getCustomArguments());
@@ -121,7 +121,7 @@ export default class TestRunner {
         this.executeTest(testArguments);  
     }
 
-    public debugTest(treeTest: Treetest) { 
+    public debugTest(treeTest: TestItem) { 
         let testcafeArguments: string[] = [this.getBrowserArg()];
         testcafeArguments = testcafeArguments.concat(this.getTestArguments(treeTest));
         testcafeArguments = testcafeArguments.concat(this.getCustomArguments());

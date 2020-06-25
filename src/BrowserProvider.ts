@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import TreeBrowser from './TreeBrowser';
+import BrowserItem from './BrowserItem';
 
 let testcafeBrowserTools = require ('testcafe-browser-tools');
 
-export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrowser> {
-    private _onDidChangeTreeData: vscode.EventEmitter<TreeBrowser> = new vscode.EventEmitter<TreeBrowser>();
-    readonly onDidChangeTreeData: vscode.Event<TreeBrowser> = this._onDidChangeTreeData.event;
+export default class BrowserProvider implements vscode.TreeDataProvider<BrowserItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<BrowserItem> = new vscode.EventEmitter<BrowserItem>();
+    readonly onDidChangeTreeData: vscode.Event<BrowserItem> = this._onDidChangeTreeData.event;
 
-    private treeBrowser: TreeBrowser[] = [];
+    private treeBrowser: BrowserItem[] = [];
 
     // super class methods
 
-    public getChildren(browser?: TreeBrowser): TreeBrowser[] { 
+    public getChildren(browser?: BrowserItem): BrowserItem[] { 
         if(browser) {
             return [];
         }
@@ -19,7 +19,7 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
         return this.treeBrowser;
     }
 
-    public getTreeItem(browser: TreeBrowser): vscode.TreeItem {
+    public getTreeItem(browser: BrowserItem): vscode.TreeItem {
         return browser;
     }
 
@@ -32,7 +32,7 @@ export default class BrowserProvider implements vscode.TreeDataProvider<TreeBrow
         }
 
         for (const browser in browserList) {
-            let treeItem: TreeBrowser = new TreeBrowser(browser, vscode.TreeItemCollapsibleState.None);
+            let treeItem: BrowserItem = new BrowserItem(browser, vscode.TreeItemCollapsibleState.None);
             if(selectedBrowser && selectedBrowser.find(element => element === browser)) {
                 treeItem.toggleSelection();
             }

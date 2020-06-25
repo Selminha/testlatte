@@ -1,54 +1,68 @@
 import * as vscode from 'vscode';
-import TreeTest from './TreeTest';
+import TestItem from './TestItem';
 import Util from './Util';
+import FolderItem from './FolderItem';
 
-export default class TestProvider implements vscode.TreeDataProvider<TreeTest> {
-    private testList: TreeTest[] = [];
-    private _onDidChangeTreeData: vscode.EventEmitter<TreeTest> = new vscode.EventEmitter<TreeTest>();
-    readonly onDidChangeTreeData: vscode.Event<TreeTest> = this._onDidChangeTreeData.event;
+export default class TestProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+    private testList: TestItem[] = [];
+    private _onDidChangeTreeData: vscode.EventEmitter<TestItem> = new vscode.EventEmitter<TestItem>();
+    readonly onDidChangeTreeData: vscode.Event<TestItem> = this._onDidChangeTreeData.event;
 
     constructor() {
     }
  
     // super class methods
 
-    public async getChildren(test?: TreeTest): Promise<TreeTest[]> {      
-
-        if (test) {
-            if (!test.isFixture()) {
+    public async getChildren(testTreeItem?: vscode.TreeItem): Promise<vscode.TreeItem[]> {    
+        
+        if (testTreeItem && (testTreeItem instanceof TestItem)) {
+            if (!testTreeItem.isFixture()) {
                 // nothing to return
-                return Promise.resolve([] as TreeTest[]);
+                return Promise.resolve([] as TestItem[]);
             }
 
-            return Promise.resolve(test.testChildren);
+            return Promise.resolve(testTreeItem.testChildren);
         }
-                
-        return Promise.resolve(this.testList);
- 
+
+        if(testTreeItem && !(testTreeItem instanceof TestItem)) {
+            return Promise.resolve(this.testList);
+        }
+
+        if(vscode.workspace.workspaceFolders /*&& (vscode.workspace.workspaceFolders.length > 1)*/) {
+            let folderList: vscode.TreeItem[] = [];
+            for (const folder of vscode.workspace.workspaceFolders) {
+                folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder.uri));
+            }
+
+            return Promise.resolve(folderList);
+        }
+
+        return Promise.resolve([]);
+                 
     }
   
-    public getTreeItem(test: TreeTest): vscode.TreeItem {
-        return test;
+    public getTreeItem(testTreeItem: vscode.TreeItem): vscode.TreeItem {
+        return testTreeItem;
     }
 
     // Class methods
-    private async getTestList(): Promise<TreeTest[]> {
-        let treeTestsList: TreeTest[] = [];
+    private async getTestList(): Promise<TestItem[]> {
+        let treeTestsList: TestItem[] = [];
 
         let filePath: string = Util.getConfiguredFilePath();
 
-        let fileListPath = await this.getFileListPath(filePath);
+        let fileListPath = await this.getFileListPath();
         for (const file of fileListPath) {
             let listTest = await this.getFileTests(file);
             for (const testCafeData of listTest) {
-                treeTestsList.push(new TreeTest(testCafeData.name,vscode.TreeItemCollapsibleState.Collapsed, testCafeData, file));
+                treeTestsList.push(new TestItem(testCafeData.name,vscode.TreeItemCollapsibleState.Collapsed, testCafeData, file));
             }
         }
 
         return Promise.resolve(treeTestsList);
     }
 
-    private async getFileListPath(filePath?: string): Promise<string[]> {
+    private async getFileListPath(): Promise<string[]> {
         let fileListPath: string[] = [];
 
         if(!vscode.workspace.workspaceFolders) {

@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
-import BrowserProvider from './BrowserProvider';
 
-export default class TreeBrowser extends vscode.TreeItem {
+export default class BrowserItem extends vscode.TreeItem {
     
     public selected: boolean;
     private selectedIcon: vscode.ThemeIcon;  
