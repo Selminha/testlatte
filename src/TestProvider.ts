@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import TestItem from './TestItem';
-import Util from './Util';
 import FolderItem from './FolderItem';
 
 export default class TestProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
@@ -13,7 +12,7 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
  
     // super class methods
 
-    public async getChildren(testTreeItem?: vscode.TreeItem): Promise<vscode.TreeItem[]> {    
+    public async getChildren(testTreeItem?: vscode.TreeItem): Promise<vscode.TreeItem[]> {   
         
         if (testTreeItem && (testTreeItem instanceof TestItem)) {
             if (!testTreeItem.isFixture()) {
@@ -24,8 +23,8 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
             return Promise.resolve(testTreeItem.testChildren);
         }
 
-        if(testTreeItem && !(testTreeItem instanceof TestItem)) {
-            return Promise.resolve(this.testList);
+        if(testTreeItem && testTreeItem instanceof FolderItem) {
+            return testTreeItem.getTestList();
         }
 
         if(vscode.workspace.workspaceFolders /*&& (vscode.workspace.workspaceFolders.length > 1)*/) {
@@ -48,8 +47,6 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
     // Class methods
     private async getTestList(): Promise<TestItem[]> {
         let treeTestsList: TestItem[] = [];
-
-        let filePath: string = Util.getConfiguredFilePath();
 
         let fileListPath = await this.getFileListPath();
         for (const file of fileListPath) {
