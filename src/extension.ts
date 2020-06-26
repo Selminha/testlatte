@@ -1,43 +1,38 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
+import Util from './Util';
 
 // TODO add exclude folder configuration
 
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+function setPanelVisibility(show: boolean) {
+	if(show) {
+		vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
+		return;
+	}
 
-async function isTestcafeInstalled(path: string) {
-	try {
-		const { stdout, stderr } = await exec('npm ls testcafe', { cwd: path });
-		return true;
-	}
-	catch(e) {
-		return false;
-	}
+	vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);	
 }
 
-async function setPanelVisibility() {
-	if(vscode.workspace.workspaceFolders) {
-		for (const folder of vscode.workspace.workspaceFolders) {
-			if(await isTestcafeInstalled(folder.uri.fsPath)) {
-				// if found at least one folder with testcafe installed activate the extension
-				vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
-				return;
-			} 
-		}
-	}
+let folderWatcher: Map<string, fs.FSWatcher> = new Map();
 
-	// If there is no folders or testcafe is not installed do not activate extension
-	vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);
+function setFolderWatcher(folder: vscode.WorkspaceFolder) {
+	let watcher: fs.FSWatcher = fs.watch(folder.uri.fsPath, async (eventType, filename) => {
+		if(filename === 'package.json') {
+			setPanelVisibility(await Util.checkAllFoldersForTestcafe());
+		}
+	});
+
+	folderWatcher.set(folder.name, watcher);
 }
 
 export async function activate(context: vscode.ExtensionContext) {
 
-	setPanelVisibility();
+	setPanelVisibility(await Util.checkAllFoldersForTestcafe());
 	
 	const browserProvider = new BrowserProvider();
 	await browserProvider.createBrowserList(context.workspaceState.get("SelectedBrowserList"));
@@ -72,28 +67,45 @@ export async function activate(context: vscode.ExtensionContext) {
 		testProvider.refresh();
 	});
 
-	vscode.commands.registerCommand('browserSelection.toggleSelection', function(treeBrowser) {
+	vscode.commands.registerCommand('browserSelection.toggleSelection', (treeBrowser) => {
 		treeBrowser.toggleSelection();
 		browserProvider.refresh();
 		context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
 	});
 
-	vscode.workspace.onDidChangeConfiguration(function (change) {
+	vscode.workspace.onDidChangeConfiguration((change) => {
 		if(change.affectsConfiguration('testlatte')) {
 			testProvider.refresh();
 		}
 	});
 
-	if(vscode.workspace.rootPath !== undefined) {
-		let fileSystemWatcher: vscode.FileSystemWatcher = vscode.workspace.createFileSystemWatcher(
-			new vscode.RelativePattern(vscode.workspace.rootPath, "**/package.json"), );
+	vscode.workspace.onDidChangeWorkspaceFolders(async (changed) => {
+		setPanelVisibility(await Util.checkAllFoldersForTestcafe());
+		for (const folder of changed.added) {
+			setFolderWatcher(folder);
+		}
 
-		fileSystemWatcher.onDidChange(function() {
-			setPanelVisibility();
-		});
+		for (const folder of changed.removed) {
+			let watcher = folderWatcher.get(folder.name);
+			if(watcher) {
+				watcher.close();
+				folderWatcher.delete(folder.name);
+			}
+		}
+	});
+
+	if(vscode.workspace.workspaceFolders) {
+		for (const folder of vscode.workspace.workspaceFolders) {
+			setFolderWatcher(folder);
+		}
 	}
+	
 }
 
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	for(const folder of folderWatcher.values()) {
+		folder.close();
+	}
+}

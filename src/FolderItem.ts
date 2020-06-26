@@ -57,13 +57,13 @@ export default class FolderItem extends vscode.TreeItem {
         return (vscode.workspace.findFiles(relativePattern, 'node_modules'));
     }
 
-    private getFileTests(file: string): Promise<FileTests> {
+    private async getFileTests(file: string): Promise<FileTests> {
         let embeddingUtils = require('testcafe').embeddingUtils;
-        let testList;
+        let testList: FileTests;
         let path = require('path');
         let extension = path.extname(file);
         if(extension === '.ts') {
-            testList = embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {  
+            testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {  
                 let fileTests: FileTests = {
                     filePath: file,
                     testsData: result
@@ -72,7 +72,7 @@ export default class FolderItem extends vscode.TreeItem {
             });
         }
         else {
-            testList = embeddingUtils.getTestList(file).then((result: any[]) => {  
+            testList = await embeddingUtils.getTestList(file).then((result: any[]) => {  
                 let fileTests: FileTests = {
                     filePath: file,
                     testsData: result
@@ -81,6 +81,6 @@ export default class FolderItem extends vscode.TreeItem {
             });
         }
 
-        return testList;
+        return Promise.resolve(testList);
     }
 }
