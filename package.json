@@ -89,12 +89,12 @@
 			"view/item/context": [
 				{
 					"command": "testOutline.debugTest",
-					"when": "view == testOutline",
+					"when": "viewItem == TestItem",
 					"group": "inline"
 				},
 				{
 					"command": "testOutline.runTest",
-					"when": "view == testOutline",
+					"when": "viewItem == TestItem",
 					"group": "inline"
 				}
 			]

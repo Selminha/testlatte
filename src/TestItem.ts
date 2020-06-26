@@ -35,6 +35,7 @@ export default class TestItem extends vscode.TreeItem {
         }        
 
         this.setCursorPosition.bind(this);
+        this.contextValue = 'TestItem';
     }
 
     public openTest() {

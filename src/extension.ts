@@ -45,7 +45,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.window.registerTreeDataProvider('browserSelection', browserProvider);
 	
 	const testProvider = new TestProvider();
-	await testProvider.startProvider();
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
 
 	vscode.commands.registerCommand('testOutline.openTest', treeTest => {

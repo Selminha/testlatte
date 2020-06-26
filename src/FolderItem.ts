@@ -8,26 +8,17 @@ interface FileTests {
 
 export default class FolderItem extends vscode.TreeItem {
     private _uri: vscode.Uri;
-    private testList: TestItem[] = [];
-
+    
     constructor (
         label: string, 
         collapsibleState: vscode.TreeItemCollapsibleState,
         uri: vscode.Uri
     ) {
         super(label, collapsibleState);
-        this._uri = uri
+        this._uri = uri;
     }
 
-    public getTestList(): Promise<TestItem[]> {
-        if(this.testList.length > 0) {
-            Promise.resolve(this.testList);
-        }
-
-        return this.fillTestList();
-    }
-
-    private fillTestList(): Promise<TestItem[]> {
+    public getTestList(): Promise<vscode.TreeItem[]> {
         return new Promise ((resolve) => {
             this.getFilePaths().then(
                 result =>  { 
@@ -37,13 +28,22 @@ export default class FolderItem extends vscode.TreeItem {
                     }
                     Promise.all(promises).then(
                         result => {
-                            this.testList = [];
+                            let foundTest = false;
+
+                            let testList: vscode.TreeItem[] = [];
                             for (const testsData of result) {
                                 for(const test of testsData.testsData) {
-                                    this.testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath));
+                                    foundTest = true;
+                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath));
                                 }
                             }
-                            resolve(this.testList);
+                            if(!foundTest) {
+                                let notFoundList: vscode.TreeItem[] = [new vscode.TreeItem('tests not found', vscode.TreeItemCollapsibleState.None)];
+                                resolve(notFoundList);
+                            }
+                            else {
+                                resolve(testList);
+                            }
                         } 
                     );
                 }
