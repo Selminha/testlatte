@@ -33,6 +33,11 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
             return Promise.resolve([] as vscode.TreeItem[])
         }
 
+        // workspace has only one folder
+        if((this._folderList.length == 1) && vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length == 1)) {
+            return this._folderList[0].getTestList();
+        }
+
         return Promise.resolve(this._folderList);                 
     }
   
@@ -52,7 +57,7 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
 
     private async fillFolderList() {
         this._folderList = [];
-        if(vscode.workspace.workspaceFolders /*&& (vscode.workspace.workspaceFolders.length > 1)*/) {
+        if(vscode.workspace.workspaceFolders) {
             for (const folder of vscode.workspace.workspaceFolders) {
                 //only show folders with testcafe installed
                 if(await Util.checkFolderForTestcafe(folder.uri.fsPath)) {
