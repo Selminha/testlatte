@@ -59,28 +59,38 @@ export default class FolderItem extends vscode.TreeItem {
 
     private async getFileTests(file: string): Promise<FileTests> {
         let embeddingUtils = require('testcafe').embeddingUtils;
-        let testList: FileTests;
+
+        let testList: FileTests = {
+            filePath: file,
+            testsData: []
+        };
+
         let path = require('path');
         let extension = path.extname(file);
-        if(extension === '.ts') {
-            testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {  
-                let fileTests: FileTests = {
-                    filePath: file,
-                    testsData: result
-                }
-                return fileTests;
-            });
+        try {
+            if(extension === '.ts') {
+                testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {  
+                    let fileTests: FileTests = {
+                        filePath: file,
+                        testsData: result
+                    }
+                    return fileTests;
+                });
+            }
+            else {
+                testList = await embeddingUtils.getTestList(file).then((result: any[]) => {  
+                    let fileTests: FileTests = {
+                        filePath: file,
+                        testsData: result
+                    }
+                    return fileTests;
+                });
+            }    
         }
-        else {
-            testList = await embeddingUtils.getTestList(file).then((result: any[]) => {  
-                let fileTests: FileTests = {
-                    filePath: file,
-                    testsData: result
-                }
-                return fileTests;
-            });
+        catch(e) {
+            console.log(e);
         }
-
+        
         return Promise.resolve(testList);
     }
 }
