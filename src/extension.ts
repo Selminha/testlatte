@@ -9,21 +9,12 @@ import Util from './Util';
 
 // TODO add exclude folder configuration
 
-function setPanelVisibility(show: boolean) {
-	if(show) {
-		vscode.commands.executeCommand('setContext', 'foundTestcafeTests', true);
-		return;
-	}
-
-	vscode.commands.executeCommand('setContext', 'foundTestcafeTests', false);	
-}
-
 let folderWatcher: Map<string, fs.FSWatcher> = new Map();
 
-function setFolderWatcher(folder: vscode.WorkspaceFolder) {
+function setFolderWatcher(folder: vscode.WorkspaceFolder, testProvider: TestProvider) {
 	let watcher: fs.FSWatcher = fs.watch(folder.uri.fsPath, async (eventType, filename) => {
 		if(filename === 'package.json') {
-			setPanelVisibility(await Util.checkAllFoldersForTestcafe());
+			testProvider.refresh();
 		}
 	});
 
@@ -32,14 +23,13 @@ function setFolderWatcher(folder: vscode.WorkspaceFolder) {
 
 export async function activate(context: vscode.ExtensionContext) {
 
-	setPanelVisibility(await Util.checkAllFoldersForTestcafe());
-	
 	const browserProvider = new BrowserProvider();
 	await browserProvider.createBrowserList(context.workspaceState.get("SelectedBrowserList"));
 	context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
 	vscode.window.registerTreeDataProvider('browserSelection', browserProvider);
 	
 	const testProvider = new TestProvider();
+	await testProvider.setProvider();
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
 
 	vscode.commands.registerCommand('testOutline.openTest', treeTest => {
@@ -80,9 +70,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.workspace.onDidChangeWorkspaceFolders(async (changed) => {
-		setPanelVisibility(await Util.checkAllFoldersForTestcafe());
+		testProvider.refresh();
 		for (const folder of changed.added) {
-			setFolderWatcher(folder);
+			setFolderWatcher(folder, testProvider);
 		}
 
 		for (const folder of changed.removed) {
@@ -96,12 +86,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	if(vscode.workspace.workspaceFolders) {
 		for (const folder of vscode.workspace.workspaceFolders) {
-			setFolderWatcher(folder);
+			setFolderWatcher(folder, testProvider);
 		}
 	}
 	
 }
-
 
 // this method is called when your extension is deactivated
 export function deactivate() {

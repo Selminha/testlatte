@@ -38,4 +38,12 @@ export default class Util {
         // If there is no folders or testcafe is not installed return false
         return Promise.resolve(false);
     }
+
+    public static async checkFolderForTestcafe(folderPath: string): Promise<boolean> {
+        if(await Util.isTestcafeInstalled(folderPath)) {
+            return Promise.resolve(true);
+        } 
+
+        return Promise.resolve(false);
+    }
 }
