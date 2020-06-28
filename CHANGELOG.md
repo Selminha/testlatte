@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.5.0 - June 27, 2020
+## 1.5.0 - June 28, 2020
 - Use Codicon icons.
 - Added support to Multi-root Workspaces
     Now it will search for tests on all folders on a workspace.
