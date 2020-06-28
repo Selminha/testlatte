@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.5.0 - June 27, 2020
+- Use Codicon icons.
+- Added support to Multi-root Workspaces
+    Now it will search for tests on all folders on a workspace.
+    It is possible to configure extension according to the folder.
+
 ## 1.4.0 - April 30, 2020
 - Changed to show "Select Browser" and "TestCafe Test List" only when testcafe is locally installed.
 
@@ -37,6 +43,5 @@
 
 ## [Unreleased]
 
-- Make it work with multi root workspace
 - Add support to browser options like headless mode and user profile
 - Add support to portable browser
