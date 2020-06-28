@@ -53,7 +53,7 @@ export default class FolderItem extends vscode.TreeItem {
     }
 
     private getFilePaths(): Thenable<vscode.Uri[]> {
-        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testlatte').get('filePath');
+        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testlatte', this.uri).get('filePath');
         let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.uri.fsPath, configuredPath + '**/*.{ts,js}');
         return (vscode.workspace.findFiles(relativePattern, 'node_modules'));
     }

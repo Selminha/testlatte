@@ -115,7 +115,8 @@
 				"testlatte.filePath": {
 					"type": "string",
 					"default": "test/",
-					"description": "Directory from which to search and run the tests."
+					"description": "Directory from which to search and run the tests.",
+					"scope": "resource"
 				},
 				"testlatte.customArguments": {
 					"type": [
@@ -123,7 +124,8 @@
 						"null"
 					],
 					"default": null,
-					"description": "Custom arguments to testcafe command line."
+					"description": "Custom arguments to testcafe command line.",
+					"scope": "resource"
 				}
 			}
 		}

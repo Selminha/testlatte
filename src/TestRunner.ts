@@ -11,13 +11,13 @@ export default class TestRunner {
     }
 
     private getBrowserArg(): string {
-        let browserArg: string = "";
+        let browserArg: string = '';
         let firstBrowser = true;
 
         this.browserList.forEach(element => {
             if(!firstBrowser)
             {
-                browserArg += ",";
+                browserArg += ',';
             }
             firstBrowser = false;
             browserArg = browserArg + element;
@@ -31,10 +31,10 @@ export default class TestRunner {
 
         if(testItem.label) {
             if(testItem.isFixture()) {
-                testArguments.push("--fixture");
+                testArguments.push('--fixture');
             }
             else {
-                testArguments.push("--test");
+                testArguments.push('--test');
             }
 
             testArguments.push(testItem.label);
@@ -43,12 +43,12 @@ export default class TestRunner {
         return testArguments;
     }
 
-    private getCustomArguments() : string[] {
+    private getCustomArguments(folderUri: vscode.Uri) : string[] {
         let customArguments: string[] = [];
 
-        let configuredCustomArguments = vscode.workspace.getConfiguration("testlatte").get("customArguments");
-        if(typeof(configuredCustomArguments) === "string") {
-            customArguments = customArguments.concat((<string>configuredCustomArguments).split(" "));
+        let configuredCustomArguments = vscode.workspace.getConfiguration('testlatte').get('customArguments');
+        if(typeof(configuredCustomArguments) === 'string') {
+            customArguments = customArguments.concat((<string>configuredCustomArguments).split(' '));
         }
 
         return customArguments;
@@ -57,7 +57,7 @@ export default class TestRunner {
     private executeTest(args: string, folderUri: vscode.Uri) {
         let testcafeTerminal: vscode.Terminal | undefined = undefined;
         for (const terminal of vscode.window.terminals) {
-            if(terminal.name === "Testcafe") { 
+            if(terminal.name === 'Testcafe') { 
                 testcafeTerminal = terminal;
             }  
         }
@@ -79,13 +79,13 @@ export default class TestRunner {
 
     private executeDebug(testArguments: string[], folderUri: vscode.Uri) {
         vscode.debug.startDebugging(vscode.workspace.getWorkspaceFolder(folderUri), {
-            name: "Run Test Testcafe",
-            request: "launch",
-            type: "node",
-            protocol: "inspector",
-            program: "${workspaceFolder}/node_modules/testcafe/bin/testcafe.js",
-            console: "integratedTerminal",
-            cwd: "${workspaceFolder}",
+            name: 'Run Test Testcafe',
+            request: 'launch',
+            type: 'node',
+            protocol: 'inspector',
+            program: '${workspaceFolder}/node_modules/testcafe/bin/testcafe.js',
+            console: 'integratedTerminal',
+            cwd: '${workspaceFolder}',
             args: testArguments
         });
     }
@@ -93,7 +93,7 @@ export default class TestRunner {
     public runTest(testItem: TestItem) {    
         let listArguments: string[] = [this.getBrowserArg()];
         listArguments = listArguments.concat(this.getTestArguments(testItem));
-        listArguments = listArguments.concat(this.getCustomArguments());
+        listArguments = listArguments.concat(this.getCustomArguments(testItem.folderUri));
 
         let testArguments:string = listArguments.map(i => {
             if(i.indexOf(' ') >= 0) {
@@ -107,7 +107,7 @@ export default class TestRunner {
 
     public runAll(folderUri: vscode.Uri) {
         let testcafeArguments: string[] = [this.getBrowserArg(), Util.getConfiguredFilePath(folderUri)];
-        testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments(folderUri));
 
         let testArguments:string = testcafeArguments.map(i => {
             if(i.indexOf(' ') >= 0) {
@@ -122,14 +122,14 @@ export default class TestRunner {
     public debugTest(testItem: TestItem) { 
         let testcafeArguments: string[] = [this.getBrowserArg()];
         testcafeArguments = testcafeArguments.concat(this.getTestArguments(testItem));
-        testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments(testItem.folderUri));
 
         this.executeDebug(testcafeArguments, testItem.folderUri);
     }
 
     public debugAll(folderUri: vscode.Uri) {
         let testcafeArguments: string[] = [this.getBrowserArg(), Util.getConfiguredFilePath(folderUri)];
-        testcafeArguments = testcafeArguments.concat(this.getCustomArguments());
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments(folderUri));
 
         this.executeDebug(testcafeArguments, folderUri);
     }

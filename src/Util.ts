@@ -10,7 +10,7 @@ export default class Util {
             return "";
         }
 
-        filePath = filePath + "/" + vscode.workspace.getConfiguration('testlatte').get('filePath');
+        filePath = filePath + "/" + vscode.workspace.getConfiguration('testlatte', folderUri).get('filePath');
 
         return filePath;
     }
