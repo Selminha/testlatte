@@ -60,7 +60,7 @@
 			{
 				"command": "testOutline.debugAll",
 				"title": "Debug All",
-				"icon": "$(debug-alt)"
+				"icon": "$(debug)"
 			},
 			{
 				"command": "testOutline.refresh",
@@ -77,16 +77,26 @@
 				},
 				{
 					"command": "testOutline.debugAll",
-					"when": "view == testOutline",
+					"when": "view == testOutline && singleFolder",
 					"group": "navigation@2"
 				},
 				{
 					"command": "testOutline.runAll",
-					"when": "view == testOutline",
+					"when": "view == testOutline && singleFolder",
 					"group": "navigation@3"
 				}
 			],
 			"view/item/context": [
+				{
+					"command": "testOutline.debugAll",
+					"when": "viewItem == FolderItem",
+					"group": "inline"
+				},
+				{
+					"command": "testOutline.runAll",
+					"when": "viewItem == FolderItem",
+					"group": "inline"
+				},
 				{
 					"command": "testOutline.debugTest",
 					"when": "viewItem == TestItem",

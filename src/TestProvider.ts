@@ -35,9 +35,11 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
 
         // workspace has only one folder
         if((this._folderList.length == 1) && vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length == 1)) {
+            vscode.commands.executeCommand('setContext', 'singleFolder', true);
             return this._folderList[0].getTestList();
         }
 
+        vscode.commands.executeCommand('setContext', 'singleFolder', false);
         return Promise.resolve(this._folderList);                 
     }
   

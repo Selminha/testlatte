@@ -3,9 +3,9 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 export default class Util {
-    public static getConfiguredFilePath(): string {
+    public static getConfiguredFilePath(folderUri: vscode.Uri): string {
 
-        let filePath: string | undefined = vscode.workspace.rootPath;
+        let filePath: string | undefined = folderUri.fsPath;
         if(filePath === undefined) {
             return "";
         }

@@ -24,23 +24,38 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('testOutline.openTest', treeTest => {
 		treeTest.openTest();
 	});
-	vscode.commands.registerCommand('testOutline.debugTest', treeTest => {
-		treeTest.openTest();
+	vscode.commands.registerCommand('testOutline.debugTest', testItem => {
+		testItem.openTest();
 		let testRunner: TestRunner = new TestRunner(browserProvider);
-		testRunner.debugTest(treeTest);
+		testRunner.debugTest(testItem);
 	});
 	vscode.commands.registerCommand('testOutline.runTest', testItem => {
 		testItem.openTest();
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		testRunner.runTest(testItem);
 	});
-	vscode.commands.registerCommand('testOutline.debugAll', () => {
+	vscode.commands.registerCommand('testOutline.debugAll', (folderItem) => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
-		testRunner.debugAll();
+		if(folderItem) {
+			testRunner.debugAll(folderItem.uri);
+			return;
+		}
+
+		if(vscode.workspace.workspaceFolders) {
+			testRunner.debugAll(vscode.workspace.workspaceFolders[0].uri);
+		}
 	});
-	vscode.commands.registerCommand('testOutline.runAll', () => {
+	vscode.commands.registerCommand('testOutline.runAll', (folderItem) => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
-		testRunner.runAll();
+		if(folderItem) {
+			testRunner.runAll(folderItem.uri);
+			return;
+		}
+
+		if(vscode.workspace.workspaceFolders) {
+			testRunner.runAll(vscode.workspace.workspaceFolders[0].uri);
+		}
+		
 	});
 	vscode.commands.registerCommand('testOutline.refresh', () => {
 		testProvider.refresh();
