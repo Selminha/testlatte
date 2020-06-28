@@ -25,20 +25,6 @@ export default class Util {
         }
     }
 
-    public static async checkAllFoldersForTestcafe(): Promise<boolean> {
-        if(vscode.workspace.workspaceFolders) {
-            for (const folder of vscode.workspace.workspaceFolders) {
-                // if found at least one folder with testcafe installed return true
-                if(await Util.isTestcafeInstalled(folder.uri.fsPath)) {
-                    return Promise.resolve(true);
-                } 
-            }
-        }
-    
-        // If there is no folders or testcafe is not installed return false
-        return Promise.resolve(false);
-    }
-
     public static async checkFolderForTestcafe(folderPath: string): Promise<boolean> {
         if(await Util.isTestcafeInstalled(folderPath)) {
             return Promise.resolve(true);

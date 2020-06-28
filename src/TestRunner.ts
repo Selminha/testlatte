@@ -26,18 +26,18 @@ export default class TestRunner {
         return browserArg;
     }
 
-    private getTestArguments(treeTest: TestItem): string[] {
-        let testArguments: string[] = [treeTest.filepath];
+    private getTestArguments(testItem: TestItem): string[] {
+        let testArguments: string[] = [testItem.filepath];
 
-        if(treeTest.label) {
-            if(treeTest.isFixture()) {
+        if(testItem.label) {
+            if(testItem.isFixture()) {
                 testArguments.push("--fixture");
             }
             else {
                 testArguments.push("--test");
             }
 
-            testArguments.push(treeTest.label);
+            testArguments.push(testItem.label);
         }     
 
         return testArguments;
@@ -54,7 +54,7 @@ export default class TestRunner {
         return customArguments;
     }
 
-    private executeTest(args: string) {
+    private executeTest(args: string, folderUri: vscode.Uri) {
         let testcafeTerminal: vscode.Terminal | undefined = undefined;
         for (const terminal of vscode.window.terminals) {
             if(terminal.name === "Testcafe") { 
@@ -64,7 +64,7 @@ export default class TestRunner {
 
         if(!testcafeTerminal) {
             let terminalOptions: vscode.TerminalOptions = {
-                cwd: vscode.workspace.rootPath,
+                cwd: folderUri,
                 name: 'Testcafe'
             };
 
@@ -92,9 +92,9 @@ export default class TestRunner {
         });
     }
 
-    public runTest(treeTest: TestItem) {    
+    public runTest(testItem: TestItem) {    
         let listArguments: string[] = [this.getBrowserArg()];
-        listArguments = listArguments.concat(this.getTestArguments(treeTest));
+        listArguments = listArguments.concat(this.getTestArguments(testItem));
         listArguments = listArguments.concat(this.getCustomArguments());
 
         let testArguments:string = listArguments.map(i => {
@@ -104,7 +104,7 @@ export default class TestRunner {
             return (i);            
         }).join(' ');
 
-        this.executeTest(testArguments);        
+        this.executeTest(testArguments, testItem.folderUri);        
     }
 
     public runAll() {
@@ -118,7 +118,7 @@ export default class TestRunner {
             return (i);            
         }).join(' ');
 
-        this.executeTest(testArguments);  
+        //this.executeTest(testArguments);  
     }
 
     public debugTest(treeTest: TestItem) { 

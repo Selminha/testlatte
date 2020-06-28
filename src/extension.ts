@@ -1,25 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as fs from 'fs';
+import * as chokidar from 'chokidar';
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
-import Util from './Util';
 
 // TODO add exclude folder configuration
 
-let folderWatcher: Map<string, fs.FSWatcher> = new Map();
-
-function setFolderWatcher(folder: vscode.WorkspaceFolder, testProvider: TestProvider) {
-	let watcher: fs.FSWatcher = fs.watch(folder.uri.fsPath, async (eventType, filename) => {
-		if(filename === 'package.json') {
-			testProvider.refresh();
-		}
-	});
-
-	folderWatcher.set(folder.name, watcher);
-}
+let watcher:chokidar.FSWatcher;
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -40,10 +29,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		testRunner.debugTest(treeTest);
 	});
-	vscode.commands.registerCommand('testOutline.runTest', treeTest => {
-		treeTest.openTest();
+	vscode.commands.registerCommand('testOutline.runTest', testItem => {
+		testItem.openTest();
 		let testRunner: TestRunner = new TestRunner(browserProvider);
-		testRunner.runTest(treeTest);
+		testRunner.runTest(testItem);
 	});
 	vscode.commands.registerCommand('testOutline.debugAll', () => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
@@ -69,32 +58,39 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	vscode.workspace.onDidChangeWorkspaceFolders(async (changed) => {
-		testProvider.refresh();
-		for (const folder of changed.added) {
-			setFolderWatcher(folder, testProvider);
-		}
-
-		for (const folder of changed.removed) {
-			let watcher = folderWatcher.get(folder.name);
-			if(watcher) {
-				watcher.close();
-				folderWatcher.delete(folder.name);
+	watcher = chokidar.watch('', { ignored: /^\./, persistent: true, ignoreInitial: true });
+	watcher
+		.on('addDir', function(path) {
+			if(path.match('.\/node_modules\/testcafe$')) {
+				testProvider.refresh();
 			}
-		}
-	});
+		})
+		.on('unlinkDir', function(path) {
+			if(path.match('.\/node_modules\/testcafe$')) {
+				testProvider.refresh();
+			}
+		});
 
 	if(vscode.workspace.workspaceFolders) {
 		for (const folder of vscode.workspace.workspaceFolders) {
-			setFolderWatcher(folder, testProvider);
+			watcher.add(folder.uri.fsPath);
 		}
 	}
+
+	vscode.workspace.onDidChangeWorkspaceFolders(async (changed) => {
+		testProvider.refresh();
+		for (const folder of changed.added) {
+			watcher.add(folder.uri.fsPath);
+		}
+
+		for (const folder of changed.removed) {
+			await watcher.unwatch(folder.uri.fsPath);
+		}
+	});
 	
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {
-	for(const folder of folderWatcher.values()) {
-		folder.close();
-	}
+export async function deactivate() {
+	await watcher.close();
 }

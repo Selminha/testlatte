@@ -6,6 +6,8 @@ export default class TestItem extends vscode.TreeItem {
     private _startLine: number;
     private _testChildren: TestItem[];
 
+    public folderUri: vscode.Uri;
+
     public get filepath(): string {
         return this._filepath;
     }
@@ -18,7 +20,8 @@ export default class TestItem extends vscode.TreeItem {
         label: string, 
         collapsibleState: vscode.TreeItemCollapsibleState,
         testCafeData: any,
-        filepath: string
+        filepath: string,
+        folderUri: vscode.Uri
     ) {
         super(label, collapsibleState);
         this.command =  {
@@ -36,6 +39,7 @@ export default class TestItem extends vscode.TreeItem {
 
         this.setCursorPosition.bind(this);
         this.contextValue = 'TestItem';
+        this.folderUri = folderUri;
     }
 
     public openTest() {
@@ -62,7 +66,7 @@ export default class TestItem extends vscode.TreeItem {
 
     private createChildrenList(testCafeData: any) {
         for (const testData of testCafeData.tests) {
-            this._testChildren.push(new TestItem(testData.name, vscode.TreeItemCollapsibleState.None, testData, this._filepath));
+            this._testChildren.push(new TestItem(testData.name, vscode.TreeItemCollapsibleState.None, testData, this._filepath, this.folderUri));
         }
     }
 }

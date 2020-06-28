@@ -34,7 +34,7 @@ export default class FolderItem extends vscode.TreeItem {
                             for (const testsData of result) {
                                 for(const test of testsData.testsData) {
                                     foundTest = true;
-                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath));
+                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath, this._uri));
                                 }
                             }
                             if(!foundTest) {
