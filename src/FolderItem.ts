@@ -8,9 +8,9 @@ interface FileTests {
 
 export default class FolderItem extends vscode.TreeItem {
     public uri: vscode.Uri;
-    
+
     constructor (
-        label: string, 
+        label: string,
         collapsibleState: vscode.TreeItemCollapsibleState,
         uri: vscode.Uri
     ) {
@@ -22,7 +22,7 @@ export default class FolderItem extends vscode.TreeItem {
     public getTestList(): Promise<vscode.TreeItem[]> {
         return new Promise ((resolve) => {
             this.getFilePaths().then(
-                result =>  { 
+                result =>  {
                     var promises = [];
                     for (const file of result) {
                         promises.push(this.getFileTests(file.fsPath));
@@ -39,13 +39,13 @@ export default class FolderItem extends vscode.TreeItem {
                                 }
                             }
                             if(!foundTest) {
-                                let notFoundList: vscode.TreeItem[] = [new vscode.TreeItem('tests not found', vscode.TreeItemCollapsibleState.None)];
+                                let notFoundList: vscode.TreeItem[] = [new vscode.TreeItem('No test found.', vscode.TreeItemCollapsibleState.None)];
                                 resolve(notFoundList);
                             }
                             else {
                                 resolve(testList);
                             }
-                        } 
+                        }
                     );
                 }
             );
@@ -70,7 +70,7 @@ export default class FolderItem extends vscode.TreeItem {
         let extension = path.extname(file);
         try {
             if(extension === '.ts') {
-                testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {  
+                testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {
                     let fileTests: FileTests = {
                         filePath: file,
                         testsData: result
@@ -79,19 +79,19 @@ export default class FolderItem extends vscode.TreeItem {
                 });
             }
             else {
-                testList = await embeddingUtils.getTestList(file).then((result: any[]) => {  
+                testList = await embeddingUtils.getTestList(file).then((result: any[]) => {
                     let fileTests: FileTests = {
                         filePath: file,
                         testsData: result
                     }
                     return fileTests;
                 });
-            }    
+            }
         }
         catch(e) {
             console.log(e);
         }
-        
+
         return Promise.resolve(testList);
     }
 }

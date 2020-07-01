@@ -7,15 +7,13 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
     private _onDidChangeTreeData: vscode.EventEmitter<TestItem> = new vscode.EventEmitter<TestItem>();
     readonly onDidChangeTreeData: vscode.Event<TestItem> = this._onDidChangeTreeData.event;
 
-    private _folderList: FolderItem[] = [];
-
     constructor() {
     }
- 
+
     // super class methods
 
-    public async getChildren(testTreeItem?: vscode.TreeItem): Promise<vscode.TreeItem[]> {   
-        
+    public async getChildren(testTreeItem?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
+
         if (testTreeItem && (testTreeItem instanceof TestItem)) {
             if (!testTreeItem.isFixture()) {
                 // nothing to return
@@ -33,40 +31,33 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
             return Promise.resolve([] as vscode.TreeItem[])
         }
 
+        if(!vscode.workspace.workspaceFolders) {
+            let folderNotFound: vscode.TreeItem[] = [new vscode.TreeItem('You have not yet opened a folder.', vscode.TreeItemCollapsibleState.None)];
+            return Promise.resolve(folderNotFound);
+        }
+
+        let folderList: FolderItem[] = [];
+        for (const folder of vscode.workspace.workspaceFolders) {
+            folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder.uri));
+        }
+
         // workspace has only one folder
-        if((this._folderList.length == 1) && vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length == 1)) {
+        if(folderList.length == 1) {
             vscode.commands.executeCommand('setContext', 'singleFolder', true);
-            return this._folderList[0].getTestList();
+            return folderList[0].getTestList();
         }
 
         vscode.commands.executeCommand('setContext', 'singleFolder', false);
-        return Promise.resolve(this._folderList);                 
+
+        return Promise.resolve(folderList);
     }
-  
+
     public getTreeItem(testTreeItem: vscode.TreeItem): vscode.TreeItem {
         return testTreeItem;
     }
 
     public async refresh () {
-        await this.setProvider();
         this._onDidChangeTreeData.fire();
-    }
-
-    public async setProvider() {
-        await this.fillFolderList();
-        vscode.commands.executeCommand('setContext', 'foundTestcafeTests', this._folderList.length > 0);
-    }
-
-    private async fillFolderList() {
-        this._folderList = [];
-        if(vscode.workspace.workspaceFolders) {
-            for (const folder of vscode.workspace.workspaceFolders) {
-                //only show folders with testcafe installed
-                if(await Util.checkFolderForTestcafe(folder.uri.fsPath)) {
-                    this._folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder.uri));
-                }
-            }
-        }
     }
 }
 
