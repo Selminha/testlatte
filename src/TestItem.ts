@@ -33,13 +33,14 @@ export default class TestItem extends vscode.TreeItem {
         this._filepath = filepath;
         this._startLine = testCafeData.loc.start.line;
         this._testChildren = [];
+        this.folderUri = folderUri;
+        
         if(testCafeData.tests) {
             this.createChildrenList(testCafeData);
         }        
 
         this.setCursorPosition.bind(this);
         this.contextValue = 'TestItem';
-        this.folderUri = folderUri;
     }
 
     public openTest() {
