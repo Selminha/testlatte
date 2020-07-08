@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.5.1 - July 07, 2020
+- Fix issue #3 "testOutline.runTest" error.
+
 ## 1.5.0 - June 28, 2020
 - Use Codicon icons.
 - Added support to Multi-root Workspaces
