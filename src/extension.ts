@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
+import { Util } from './Util';
 
 // TODO add exclude folder configuration
 
@@ -16,7 +17,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const testProvider = new TestProvider();
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
-
+	
 	vscode.commands.registerCommand('testOutline.openTest', treeTest => {
 		treeTest.openTest();
 	});

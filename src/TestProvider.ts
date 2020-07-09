@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import TestItem from './TestItem';
 import FolderItem from './FolderItem';
-import Util from './Util';
 
 export default class TestProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<TestItem> = new vscode.EventEmitter<TestItem>();

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import BrowserProvider from './BrowserProvider';
 import TestItem from './TestItem';
-import Util from './Util';
+import { Util } from './Util';
 
 export default class TestRunner {
     private browserList: (string | undefined)[];
@@ -83,7 +83,7 @@ export default class TestRunner {
             request: 'launch',
             type: 'node',
             protocol: 'inspector',
-            program: '${workspaceFolder}/node_modules/testcafe/bin/testcafe.js',
+            program: '${workspaceFolder}/node_modules/.bin/testcafe',
             console: 'integratedTerminal',
             cwd: '${workspaceFolder}',
             args: testArguments
