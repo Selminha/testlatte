@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import TestItem from './TestItem';
+import Util from './Util';
 
 interface FileTests {
     filePath: string;
@@ -53,7 +54,7 @@ export default class FolderItem extends vscode.TreeItem {
     }
 
     private getFilePaths(): Thenable<vscode.Uri[]> {
-        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testlatte', this.uri).get('filePath');
+        let configuredPath: string = Util.getConfiguredFilePath(vscode.workspace.getWorkspaceFolder(this.uri));
         let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.uri.fsPath, configuredPath + '**/*.{ts,js}');
         return (vscode.workspace.findFiles(relativePattern, 'node_modules'));
     }

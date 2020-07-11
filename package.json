@@ -128,6 +128,11 @@
 					"description": "Directory from which to search and run the tests.",
 					"scope": "resource"
 				},
+				"testlatte.testcafePath": {
+					"type": "string",
+					"markdownDescription": "Path to the TestCafe module used to execute the tests. If it is not configured it will use the path `[testWorkspaceFolder]/node_modules/testcafe/bin/testcafe.js` where `testWorkspaceFolder` is the workspace folder of the test",
+					"scope": "resource"
+				},
 				"testlatte.customArguments": {
 					"type": [
 						"string",

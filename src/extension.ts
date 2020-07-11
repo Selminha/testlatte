@@ -4,12 +4,20 @@ import * as vscode from 'vscode';
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
-import { Util } from './Util';
 
 // TODO add exclude folder configuration
 
-export async function activate(context: vscode.ExtensionContext) {
+function testeTemplate(literals: any, ...expressions: any[]) {
+	let string = ``
+	for (const [i, val] of expressions.entries()) {
+		string += literals[i] + val
+	}
+	string += literals[literals.length - 1]
+	return string
+}
 
+export async function activate(context: vscode.ExtensionContext) {
+	
 	const browserProvider = new BrowserProvider();
 	await browserProvider.createBrowserList(context.workspaceState.get("SelectedBrowserList"));
 	context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
@@ -73,7 +81,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidChangeWorkspaceFolders(() => {
 		testProvider.refresh();
 	});
-
 }
 
 // this method is called when your extension is deactivated
