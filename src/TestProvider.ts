@@ -37,7 +37,7 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
 
         let folderList: FolderItem[] = [];
         for (const folder of vscode.workspace.workspaceFolders) {
-            folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder.uri));
+            folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder));
         }
 
         // workspace has only one folder

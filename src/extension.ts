@@ -7,15 +7,6 @@ import TestRunner from './TestRunner';
 
 // TODO add exclude folder configuration
 
-function testeTemplate(literals: any, ...expressions: any[]) {
-	let string = ``
-	for (const [i, val] of expressions.entries()) {
-		string += literals[i] + val
-	}
-	string += literals[literals.length - 1]
-	return string
-}
-
 export async function activate(context: vscode.ExtensionContext) {
 	
 	const browserProvider = new BrowserProvider();
@@ -42,23 +33,23 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('testOutline.debugAll', (folderItem) => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		if(folderItem) {
-			testRunner.debugAll(folderItem.uri);
+			testRunner.debugAll(folderItem.folder);
 			return;
 		}
 
 		if(vscode.workspace.workspaceFolders) {
-			testRunner.debugAll(vscode.workspace.workspaceFolders[0].uri);
+			testRunner.debugAll(vscode.workspace.workspaceFolders[0]);
 		}
 	});
 	vscode.commands.registerCommand('testOutline.runAll', (folderItem) => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
 		if(folderItem) {
-			testRunner.runAll(folderItem.uri);
+			testRunner.runAll(folderItem.folder);
 			return;
 		}
 
 		if(vscode.workspace.workspaceFolders) {
-			testRunner.runAll(vscode.workspace.workspaceFolders[0].uri);
+			testRunner.runAll(vscode.workspace.workspaceFolders[0]);
 		}
 
 	});

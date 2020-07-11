@@ -8,15 +8,15 @@ interface FileTests {
 }
 
 export default class FolderItem extends vscode.TreeItem {
-    public uri: vscode.Uri;
+    public folder: vscode.WorkspaceFolder;
 
     constructor (
         label: string,
         collapsibleState: vscode.TreeItemCollapsibleState,
-        uri: vscode.Uri
+        folder: vscode.WorkspaceFolder
     ) {
         super(label, collapsibleState);
-        this.uri = uri;
+        this.folder = folder;
         this.contextValue = 'FolderItem';
     }
 
@@ -36,7 +36,7 @@ export default class FolderItem extends vscode.TreeItem {
                             for (const testsData of result) {
                                 for(const test of testsData.testsData) {
                                     foundTest = true;
-                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath, this.uri));
+                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath, this.folder));
                                 }
                             }
                             if(!foundTest) {
@@ -54,8 +54,8 @@ export default class FolderItem extends vscode.TreeItem {
     }
 
     private getFilePaths(): Thenable<vscode.Uri[]> {
-        let configuredPath: string = Util.getConfiguredFilePath(vscode.workspace.getWorkspaceFolder(this.uri));
-        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.uri.fsPath, configuredPath + '**/*.{ts,js}');
+        let configuredPath: string = Util.getConfiguredFilePath(this.folder);
+        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.folder, configuredPath + '**/*.{ts,js}');
         return (vscode.workspace.findFiles(relativePattern, 'node_modules'));
     }
 
