@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import TestItem from './TestItem';
+import Util from './Util';
 
 interface FileTests {
     filePath: string;
@@ -7,22 +8,22 @@ interface FileTests {
 }
 
 export default class FolderItem extends vscode.TreeItem {
-    public uri: vscode.Uri;
-    
+    public folder: vscode.WorkspaceFolder;
+
     constructor (
-        label: string, 
+        label: string,
         collapsibleState: vscode.TreeItemCollapsibleState,
-        uri: vscode.Uri
+        folder: vscode.WorkspaceFolder
     ) {
         super(label, collapsibleState);
-        this.uri = uri;
+        this.folder = folder;
         this.contextValue = 'FolderItem';
     }
 
     public getTestList(): Promise<vscode.TreeItem[]> {
         return new Promise ((resolve) => {
             this.getFilePaths().then(
-                result =>  { 
+                result =>  {
                     var promises = [];
                     for (const file of result) {
                         promises.push(this.getFileTests(file.fsPath));
@@ -35,17 +36,17 @@ export default class FolderItem extends vscode.TreeItem {
                             for (const testsData of result) {
                                 for(const test of testsData.testsData) {
                                     foundTest = true;
-                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath, this.uri));
+                                    testList.push(new TestItem(test.name,vscode.TreeItemCollapsibleState.Collapsed, test, testsData.filePath, this.folder));
                                 }
                             }
                             if(!foundTest) {
-                                let notFoundList: vscode.TreeItem[] = [new vscode.TreeItem('tests not found', vscode.TreeItemCollapsibleState.None)];
+                                let notFoundList: vscode.TreeItem[] = [new vscode.TreeItem('No test found.', vscode.TreeItemCollapsibleState.None)];
                                 resolve(notFoundList);
                             }
                             else {
                                 resolve(testList);
                             }
-                        } 
+                        }
                     );
                 }
             );
@@ -53,8 +54,8 @@ export default class FolderItem extends vscode.TreeItem {
     }
 
     private getFilePaths(): Thenable<vscode.Uri[]> {
-        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testlatte', this.uri).get('filePath');
-        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.uri.fsPath, configuredPath + '**/*.{ts,js}');
+        let configuredPath: string = Util.getConfiguredFilePath(this.folder);
+        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.folder, configuredPath + '**/*.{ts,js}');
         return (vscode.workspace.findFiles(relativePattern, 'node_modules'));
     }
 
@@ -70,7 +71,7 @@ export default class FolderItem extends vscode.TreeItem {
         let extension = path.extname(file);
         try {
             if(extension === '.ts') {
-                testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {  
+                testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {
                     let fileTests: FileTests = {
                         filePath: file,
                         testsData: result
@@ -79,19 +80,19 @@ export default class FolderItem extends vscode.TreeItem {
                 });
             }
             else {
-                testList = await embeddingUtils.getTestList(file).then((result: any[]) => {  
+                testList = await embeddingUtils.getTestList(file).then((result: any[]) => {
                     let fileTests: FileTests = {
                         filePath: file,
                         testsData: result
                     }
                     return fileTests;
                 });
-            }    
+            }
         }
         catch(e) {
             console.log(e);
         }
-        
+
         return Promise.resolve(testList);
     }
 }

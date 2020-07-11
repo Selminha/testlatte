@@ -1,35 +1,43 @@
 import * as vscode from 'vscode';
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
 
 export default class Util {
-    public static getConfiguredFilePath(folderUri: vscode.Uri): string {
-
-        let filePath: string | undefined = folderUri.fsPath;
-        if(filePath === undefined) {
-            return "";
+    public static getConfiguredFilePath(workspaceFolder: vscode.WorkspaceFolder | undefined): string {
+        if(workspaceFolder === undefined) {
+            return '';
         }
 
-        filePath = filePath + "/" + vscode.workspace.getConfiguration('testlatte', folderUri).get('filePath');
+        let filePath: string | undefined = vscode.workspace.getConfiguration('testlatte', workspaceFolder).get('filePath');
+
+       return (filePath ? filePath : '');
+    }
+
+    public static getFullworkspaceFilePath(workspaceFolder: vscode.WorkspaceFolder | undefined, partialFilePath: string): string {
+        if(workspaceFolder === undefined) {
+            return '';
+        }
+
+        let filePath: string | undefined = workspaceFolder.uri.fsPath;
+        if(filePath === undefined) {
+            return '';
+        }
+
+        filePath = filePath + '/' + partialFilePath;
 
         return filePath;
     }
 
-    public static async isTestcafeInstalled(path: string): Promise<boolean> {
-        try {
-            const { stdout, stderr } = await exec('npm ls testcafe', { cwd: path });
-            return Promise.resolve(true);
-        }
-        catch(e) {
-            return Promise.resolve(false);
-        }
-    }
+    public static getTestcafePath(workspaceFolder: vscode.WorkspaceFolder | undefined): string {
+        // default value
+        let testcafeDefaultPath: string = `${workspaceFolder?.uri.fsPath}/node_modules/testcafe/bin/testcafe.js`;
+        if(workspaceFolder === undefined) {
+            return testcafeDefaultPath;
+        }        
 
-    public static async checkFolderForTestcafe(folderPath: string): Promise<boolean> {
-        if(await Util.isTestcafeInstalled(folderPath)) {
-            return Promise.resolve(true);
-        } 
+        let configuredPath: string | undefined = vscode.workspace.getConfiguration('testlatte', workspaceFolder).get('testcafePath');
+        if((configuredPath === undefined) || (configuredPath.length <= 0)){
+            return testcafeDefaultPath;
+        }
 
-        return Promise.resolve(false);
+        return configuredPath;
     }
 }
