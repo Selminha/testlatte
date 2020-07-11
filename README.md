@@ -32,8 +32,11 @@ TestLatte allows you to Debug or Run your TestCafé tests on visual studio code.
 
 ## Requirements
 
-You need to install [TestCafé](https://github.com/DevExpress/testcafe) in your project as a local package. 
-TestLatte will look for TestCafé in `node_modules\testcafe\...` folder. 
+It's recommended you install [TestCafé](https://github.com/DevExpress/testcafe) on your project as a local package. 
+
+TestLatte will look for TestCafé in the default location `[testWorkspaceFolder]/node_modules/testcafe/bin` folder, where `testWorkspaceFolder` is the workspace folder of the corresponding test.
+
+If TestCafé is not installed at the default location, it is possible to configure TestCafé's module path in TestLatte configuration settings.
 
 ## Extension Settings
 
@@ -41,4 +44,4 @@ This extension contributes the following settings:
 
 * `testlatte.filePath`: Directory from which to search and run the tests. Default value is `test/`
 * `testlatte.customArguments`: Custom arguments to TestCafé command line.
-* `testlatte.testcafePath`: Path to the TestCafe module used to execute the tests. If it is not configured it will use the path `[testWorkspaceFolder]/node_modules/testcafe/bin/testcafe.js` where `testWorkspaceFolder` is the workspace folder of the test.
+* `testlatte.testcafePath`: Path to the TestCafe module used to execute the tests. If it is not configured it will use the path `[testWorkspaceFolder]/node_modules/testcafe/bin/testcafe.js`, where `testWorkspaceFolder` is the workspace folder of the corresponding test.

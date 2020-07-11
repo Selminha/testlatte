@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.0.0 - July 11, 2020
+- Migrated TestLatte to its own view container.
+- Created testcafe module path configuration.
+
 ## 1.5.1 - July 07, 2020
 - Fix issue #3 "testOutline.runTest" error.
 
