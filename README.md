@@ -41,3 +41,4 @@ This extension contributes the following settings:
 
 * `testlatte.filePath`: Directory from which to search and run the tests. Default value is `test/`
 * `testlatte.customArguments`: Custom arguments to TestCafé command line.
+* `testlatte.testcafePath`: Path to the TestCafe module used to execute the tests. If it is not configured it will use the path `[testWorkspaceFolder]/node_modules/testcafe/bin/testcafe.js` where `testWorkspaceFolder` is the workspace folder of the test.
