@@ -6,6 +6,8 @@
 
 TestLatte allows you to Debug or Run your TestCafé tests on visual studio code.
 
+TestLatte is available on [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=sshimono.testlatte) and on [Eclipse Open VSX](https://open-vsx.org/extension/sshimono/testlatte)
+
 ## Features
 
 #### Shows a list of installed browsers and allows you to select one or more browsers to run your tests.

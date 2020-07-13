@@ -49,10 +49,6 @@
 		},
 		"commands": [
 			{
-				"command": "browserSelection.toggleSelection",
-				"title": "Select"
-			},
-			{
 				"command": "testOutline.runTest",
 				"title": "Run Test",
 				"icon": "$(play)"
@@ -79,6 +75,28 @@
 			}
 		],
 		"menus": {
+			"commandPalette": [
+				{
+				  "command": "testOutline.runTest",
+				  "when": "never"
+				},
+				{
+					"command": "testOutline.debugTest",
+					"when": "never"
+				},
+				{
+					"command": "testOutline.runAll",
+					"when": "never"
+				},
+				{
+					"command": "testOutline.debugAll",
+					"when": "never"
+				},
+				{
+					"command": "testOutline.refresh",
+					"when": "never"
+				}
+			],
 			"view/title": [
 				{
 					"command": "testOutline.refresh",
