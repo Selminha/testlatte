@@ -1,8 +1,6 @@
 # TestLatte for Visual Studio Code
 
-<p align="left">
-<a href='https://ko-fi.com/L4L31WZFI' target='_blank'><img height='18' style='border:0px;height:18px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-</p>
+[![ko-fi](./images/BuyMeACoffee_Red.png)](https://ko-fi.com/L4L31WZFI)
 
 TestLatte allows you to Debug or Run your TestCafé tests on visual studio code.
 
@@ -56,4 +54,4 @@ This extension contributes the following settings:
 
 TestLatte is free to use, but if you liked our work and want to support the project, you can make a donation clicking on the button below:
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L4L31WZFI)
+[![ko-fi](./images/SupportMe_red.png)](https://ko-fi.com/L4L31WZFI)
