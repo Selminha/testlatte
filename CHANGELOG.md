@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.0.1 - July 13, 2020
+- Commands removed from Command Palette.
+ 
 ## 2.0.0 - July 11, 2020
 - Migrated TestLatte to its own view container.
 - Created testcafe module path configuration.
