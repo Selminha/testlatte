@@ -3,7 +3,7 @@
 	"displayName": "TestLatte",
 	"description": "Run your TestCafé tests in the Sidebar of Visual Studio Code",
 	"publisher": "sshimono",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"icon": "images/icon.png",
 	"engines": {
 		"vscode": "^1.43.2"
@@ -77,8 +77,8 @@
 		"menus": {
 			"commandPalette": [
 				{
-				  "command": "testOutline.runTest",
-				  "when": "never"
+					"command": "testOutline.runTest",
+					"when": "never"
 				},
 				{
 					"command": "testOutline.debugTest",
