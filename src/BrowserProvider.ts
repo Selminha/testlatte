@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import BrowserItem from './BrowserItem';
+import Util from './Util';
 
 let testcafeBrowserTools = require ('testcafe-browser-tools');
 
@@ -45,15 +46,15 @@ export default class BrowserProvider implements vscode.TreeDataProvider<BrowserI
         }
     }
 
-    public refresh() {
-        this._onDidChangeTreeData.fire();
+    public refresh(browserItem: BrowserItem) {
+        this._onDidChangeTreeData.fire(browserItem);
     }
 
     public getBrowserList(): (string | undefined)[] {
         let browserList: (string | undefined)[] = [];
         this.treeBrowser.forEach(element => {
             if(element.selected) {
-                browserList.push(element.label);  
+                browserList.push(Util.instanceOfTreeItemLabel(element.label) ? element.label.label : element.label);               
             }                 
         });
         

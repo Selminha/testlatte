@@ -75,7 +75,7 @@ export default class FolderItem extends vscode.TreeItem {
                     let fileTests: FileTests = {
                         filePath: file,
                         testsData: result
-                    }
+                    };
                     return fileTests;
                 });
             }
@@ -84,7 +84,7 @@ export default class FolderItem extends vscode.TreeItem {
                     let fileTests: FileTests = {
                         filePath: file,
                         testsData: result
-                    }
+                    };
                     return fileTests;
                 });
             }

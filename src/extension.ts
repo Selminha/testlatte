@@ -59,7 +59,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('browserSelection.toggleSelection', (treeBrowser) => {
 		treeBrowser.toggleSelection();
-		browserProvider.refresh();
+		browserProvider.refresh(treeBrowser);
 		context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
 	});
 

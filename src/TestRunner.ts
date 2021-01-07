@@ -37,7 +37,7 @@ export default class TestRunner {
                 testArguments.push('--test');
             }
 
-            testArguments.push(testItem.label);
+            testArguments.push(Util.instanceOfTreeItemLabel(testItem.label) ? testItem.label.label : testItem.label);
         }     
 
         return testArguments;
