@@ -30,12 +30,11 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
             return Promise.resolve([] as vscode.TreeItem[]);
         }
 
+        let folderList: FolderItem[] = [];
         if(!vscode.workspace.workspaceFolders) {
-            let folderNotFound: vscode.TreeItem[] = [new vscode.TreeItem('You have not yet opened a folder.', vscode.TreeItemCollapsibleState.None)];
-            return Promise.resolve(folderNotFound);
+            return Promise.resolve(folderList);
         }
 
-        let folderList: FolderItem[] = [];
         for (const folder of vscode.workspace.workspaceFolders) {
             folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder));
         }

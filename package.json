@@ -33,6 +33,17 @@
 				}
 			]
 		},
+		"viewsWelcome": [
+			{
+				"view": "testOutline",
+				"contents": "In order to use Testlatte features, open a folder containing Testcafe tests.\n[Open Folder](command:vscode.openFolder)\n",
+				"when": "workbenchState == empty"
+			},
+			{
+				"view": "browserSelection",
+				"contents": "Can't find any browser installed.\nYou need to have at least one browser installed in order to use Testlatte features.\n"
+			}
+		],
 		"views": {
 			"testlatte": [
 				{
