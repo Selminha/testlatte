@@ -3,8 +3,8 @@ import TestItem from './TestItem';
 import FolderItem from './FolderItem';
 
 export default class TestProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<TestItem> = new vscode.EventEmitter<TestItem>();
-    readonly onDidChangeTreeData: vscode.Event<TestItem> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: vscode.EventEmitter<undefined> = new vscode.EventEmitter<undefined>();
+    readonly onDidChangeTreeData: vscode.Event<undefined> = this._onDidChangeTreeData.event;
 
     constructor() {
     }
@@ -27,21 +27,20 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
         }
 
         if(testTreeItem) {
-            return Promise.resolve([] as vscode.TreeItem[])
-        }
-
-        if(!vscode.workspace.workspaceFolders) {
-            let folderNotFound: vscode.TreeItem[] = [new vscode.TreeItem('You have not yet opened a folder.', vscode.TreeItemCollapsibleState.None)];
-            return Promise.resolve(folderNotFound);
+            return Promise.resolve([] as vscode.TreeItem[]);
         }
 
         let folderList: FolderItem[] = [];
+        if(!vscode.workspace.workspaceFolders) {
+            return Promise.resolve(folderList);
+        }
+
         for (const folder of vscode.workspace.workspaceFolders) {
             folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder));
         }
 
         // workspace has only one folder
-        if(folderList.length == 1) {
+        if(folderList.length === 1) {
             vscode.commands.executeCommand('setContext', 'singleFolder', true);
             return folderList[0].getTestList();
         }
@@ -56,7 +55,7 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
     }
 
     public async refresh () {
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire(undefined);
     }
 }
 

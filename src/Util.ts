@@ -40,4 +40,8 @@ export default class Util {
 
         return configuredPath;
     }
+
+    public static instanceOfTreeItemLabel(object: any): object is vscode.TreeItemLabel {
+        return object.label != undefined;
+    }
 }
