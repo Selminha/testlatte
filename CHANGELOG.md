@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.0 - Jan 12, 2021
+- Changed tslint to eslint.
+- Added welcome views.
+
 ## 2.0.1 - July 13, 2020
 - Commands removed from Command Palette.
  
