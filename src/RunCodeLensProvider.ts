@@ -32,6 +32,8 @@ export default class RunCodeLensProvider implements vscode.CodeLensProvider {
     }
 
     private createCodeLens(test: IFixture | ITest): vscode.CodeLens[] {
+        this.debugCommand.arguments = [test, ];
+        this.runCommand.arguments = [test, ];
         let DebugPosition = new vscode.Range(test.startLine-1, 0, test.startLine-1, this.debugCommand.title.length);
         let runPosition = new vscode.Range(test.startLine-1, this.debugCommand.title.length, test.startLine-1, this.debugCommand.title.length + this.runCommand.title.length);
         return [new vscode.CodeLens(DebugPosition, this.debugCommand), new vscode.CodeLens(runPosition, this.runCommand)];

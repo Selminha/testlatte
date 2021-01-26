@@ -14,17 +14,17 @@ export default class SearchTests {
         }
     }
 
-    private dataToTest(data:any) : IFixture|ITest {
+    private dataToTest(data:any, filePath: string) : IFixture|ITest {
         if(data.tests) {
             let fixture: IFixture|ITest;
             fixture = {
                 testName: data.name,
-                filePath: data.filePath,
+                filePath: filePath,
                 startLine: data.loc.start.line,
                 testChildren: (() => { 
                     let tests = new Array<ITest>();
                     for(const test of data.tests) {
-                        tests.push(this.dataToTest(test));
+                        tests.push(this.dataToTest(test, filePath));
                     }
                     return tests;
                 })(),
@@ -35,26 +35,30 @@ export default class SearchTests {
 
         let test = {
             testName: data.name,
-            filePath: data.filePath,
+            filePath: filePath,
             startLine: data.loc.start.line
         } as ITest;
 
         return test;
     }
 
-    private convertData(dataList: any[]) : Array<IFixture|ITest> {
+    private convertData(dataList: any[], filePath: string) : Array<IFixture|ITest> {
         let fileData = new Array<IFixture|ITest>();
         for(const data of dataList) {
-            fileData.push(this.dataToTest(data));
+            fileData.push(this.dataToTest(data, filePath));
         }
 
         return fileData;
     }
 
     public async getFileTests(wokspaceFolder: string, file: string): Promise<Array<ITest|IFixture> | undefined> {
-        let workspace = this.workspaceFoldersTest.get(wokspaceFolder);
+        let workspace : Map<string, Promise<Array<ITest|IFixture>>> | undefined = this.workspaceFoldersTest.get(wokspaceFolder);
         if((workspace != undefined) && (workspace.get(file) != undefined)){
             return workspace.get(file);
+        }
+        else if (workspace === undefined){
+            workspace = new Map();
+            this.workspaceFoldersTest.set(wokspaceFolder, workspace);
         }
         
         let embeddingUtils = require('testcafe').embeddingUtils;
@@ -66,18 +70,18 @@ export default class SearchTests {
         try {
             if(extension === '.ts') {
                 testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {
-                    return this.convertData(result);
+                    return this.convertData(result, file);
                 });
 
-                workspace?.set(file, testList);
+                workspace.set(file, testList);
                 
             }
             else {
-                testList = await embeddingUtils.getTypeScriptTestList(file).then((result: any[]) => {
-                    return this.convertData(result);
+                testList = await embeddingUtils.getTestListModule(file).then((result: any[]) => {
+                    return this.convertData(result, file);
                 });
 
-                workspace?.set(file, testList);
+                workspace.set(file, testList);
             }
         }
         catch(e) {

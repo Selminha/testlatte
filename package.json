@@ -13,8 +13,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onView:testOutline",
-		"onView:browserSelection"
+		"onLanguage:javascript",
+    	"onLanguage:typescript"
 	],
 	"keywords": [
 		"TestCafe",

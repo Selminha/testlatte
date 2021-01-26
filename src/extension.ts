@@ -18,7 +18,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.workspaceState.update("SelectedBrowserList", browserProvider.getBrowserList());
 	vscode.window.registerTreeDataProvider('browserSelection', browserProvider);
 
-	const testProvider = new TestProvider();
+	const testProvider = new TestProvider(searchTests);
 	vscode.window.registerTreeDataProvider('testOutline', testProvider);
 	
 	vscode.commands.registerCommand('testOutline.openTest', treeTest => {

@@ -1,12 +1,18 @@
 import * as vscode from 'vscode';
 import TestItem from './TestItem';
 import FolderItem from './FolderItem';
+import SearchTests from './SearchTests';
 
 export default class TestProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<undefined> = new vscode.EventEmitter<undefined>();
     readonly onDidChangeTreeData: vscode.Event<undefined> = this._onDidChangeTreeData.event;
 
-    constructor() {
+    private searchTests: SearchTests;
+    
+    constructor(
+        searchTests: SearchTests
+    ) {
+        this.searchTests = searchTests;
     }
 
     // super class methods
@@ -36,7 +42,7 @@ export default class TestProvider implements vscode.TreeDataProvider<vscode.Tree
         }
 
         for (const folder of vscode.workspace.workspaceFolders) {
-            folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder));
+            folderList.push(new FolderItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed, folder, this.searchTests));
         }
 
         // workspace has only one folder
