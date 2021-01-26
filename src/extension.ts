@@ -4,10 +4,14 @@ import * as vscode from 'vscode';
 import TestProvider from './TestProvider';
 import BrowserProvider from './BrowserProvider';
 import TestRunner from './TestRunner';
+import RunCodeLensProvider from './RunCodeLensProvider';
+import SearchTests from './SearchTests';
 
 // TODO add exclude folder configuration
 
 export async function activate(context: vscode.ExtensionContext) {
+	
+	const searchTests = new SearchTests();
 	
 	const browserProvider = new BrowserProvider();
 	await browserProvider.createBrowserList(context.workspaceState.get("SelectedBrowserList"));
@@ -72,6 +76,14 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidChangeWorkspaceFolders(() => {
 		testProvider.refresh();
 	});
+
+	// Code Lens
+	let codeLensProviderDisposable = vscode.languages.registerCodeLensProvider(
+		RunCodeLensProvider.docSelector,
+		new RunCodeLensProvider(searchTests)
+	);
+	
+	context.subscriptions.push(codeLensProviderDisposable);
 }
 
 // this method is called when your extension is deactivated
