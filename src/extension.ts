@@ -27,12 +27,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('testOutline.debugTest', testItem => {
 		testItem.openTest();
 		let testRunner: TestRunner = new TestRunner(browserProvider);
-		testRunner.debugTest(testItem);
+		testRunner.debugTest(testItem.testData);
 	});
 	vscode.commands.registerCommand('testOutline.runTest', testItem => {
 		testItem.openTest();
 		let testRunner: TestRunner = new TestRunner(browserProvider);
-		testRunner.runTest(testItem);
+		testRunner.runTest(testItem.testData);
 	});
 	vscode.commands.registerCommand('testOutline.debugAll', (folderItem) => {
 		let testRunner: TestRunner = new TestRunner(browserProvider);
@@ -78,6 +78,16 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	// Code Lens
+	vscode.commands.registerCommand('codeLensDebugTest', test => {
+		let testRunner: TestRunner = new TestRunner(browserProvider);
+		testRunner.debugTest(test);
+	});
+
+	vscode.commands.registerCommand('codeLensRunTest', test => {
+		let testRunner: TestRunner = new TestRunner(browserProvider);
+		testRunner.runTest(test);
+	});
+
 	let codeLensProviderDisposable = vscode.languages.registerCodeLensProvider(
 		RunCodeLensProvider.docSelector,
 		new RunCodeLensProvider(searchTests)

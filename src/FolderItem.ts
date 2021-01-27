@@ -31,7 +31,7 @@ export default class FolderItem extends vscode.TreeItem {
                 result =>  {
                     var promises = [];
                     for (const file of result) {
-                        promises.push(this.searchTests.getFileTests(this.folder.name, file.fsPath));
+                        promises.push(this.searchTests.getFileTests(this.folder, file.fsPath));
                     }
                     Promise.all(promises).then(
                         result => {

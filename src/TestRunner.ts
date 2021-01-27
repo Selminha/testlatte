@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import BrowserProvider from './BrowserProvider';
-import TestItem from './TestItem';
+import { IFixture, ITest } from './TestDefinition';
 import Util from './Util';
 
 export default class TestRunner {
@@ -26,18 +26,18 @@ export default class TestRunner {
         return browserArg;
     }
 
-    private getTestArguments(testItem: TestItem): string[] {
-        let testArguments: string[] = [testItem.filepath];
+    private getTestArguments(test: IFixture|ITest): string[] {
+        let testArguments: string[] = [test.filePath];
 
-        if(testItem.label) {
-            if(testItem.isFixture()) {
+        if(test.testName) {
+            if((test as IFixture).testChildren) {
                 testArguments.push('--fixture');
             }
             else {
                 testArguments.push('--test');
             }
 
-            testArguments.push(Util.instanceOfTreeItemLabel(testItem.label) ? testItem.label.label : testItem.label);
+            testArguments.push(test.testName);
         }     
 
         return testArguments;
@@ -90,10 +90,10 @@ export default class TestRunner {
         });
     }
 
-    public runTest(testItem: TestItem) {    
+    public runTest(test: IFixture | ITest) {    
         let listArguments: string[] = [this.getBrowserArg()];
-        listArguments = listArguments.concat(this.getTestArguments(testItem));
-        listArguments = listArguments.concat(this.getCustomArguments(testItem.folder));
+        listArguments = listArguments.concat(this.getTestArguments(test));
+        listArguments = listArguments.concat(this.getCustomArguments(test.folder));
 
         let testArguments:string = listArguments.map(i => {
             if(i.indexOf(' ') >= 0) {
@@ -102,7 +102,7 @@ export default class TestRunner {
             return (i);            
         }).join(' ');
 
-        this.executeTest(testArguments, testItem.folder);        
+        this.executeTest(testArguments, test.folder);        
     }
 
     public runAll(folder: vscode.WorkspaceFolder) {
@@ -119,12 +119,12 @@ export default class TestRunner {
         this.executeTest(testArguments, folder);  
     }
 
-    public debugTest(testItem: TestItem) { 
+    public debugTest(test: IFixture | ITest) { 
         let testcafeArguments: string[] = [this.getBrowserArg()];
-        testcafeArguments = testcafeArguments.concat(this.getTestArguments(testItem));
-        testcafeArguments = testcafeArguments.concat(this.getCustomArguments(testItem.folder));
+        testcafeArguments = testcafeArguments.concat(this.getTestArguments(test));
+        testcafeArguments = testcafeArguments.concat(this.getCustomArguments(test.folder));
 
-        this.executeDebug(testcafeArguments, testItem.folder);
+        this.executeDebug(testcafeArguments, test.folder);
     }
 
     public debugAll(folder: vscode.WorkspaceFolder) {

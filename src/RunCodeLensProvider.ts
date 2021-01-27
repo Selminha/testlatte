@@ -14,12 +14,12 @@ export default class RunCodeLensProvider implements vscode.CodeLensProvider {
     ];
 
     public debugCommand: vscode.Command = {
-        command: 'testOutline.debugTest',
+        command: 'codeLensDebugTest',
         title: 'Debug',
     };
 
     public runCommand: vscode.Command = {
-        command: 'testOutline.runTest',
+        command: 'codeLensRunTest',
         title: 'Run',
     };
 
@@ -57,7 +57,7 @@ export default class RunCodeLensProvider implements vscode.CodeLensProvider {
         if(workspaceFolder === undefined) {
             return Promise.resolve(codeLens);
         }
-        let tests = await this.searchTests.getFileTests(workspaceFolder.name, document.fileName);
+        let tests = await this.searchTests.getFileTests(workspaceFolder, document.fileName);
         if(tests === undefined) {
             return Promise.resolve(codeLens);
         }

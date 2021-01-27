@@ -4,13 +4,9 @@ import { IFixture, ITest } from './TestDefinition';
 export default class TestItem extends vscode.TreeItem {
 
     private _testChildren: TestItem[];
-    private _testData: IFixture|ITest;
 
+    public testData: IFixture|ITest;
     public folder: vscode.WorkspaceFolder;
-
-    public get filepath(): string {
-        return this._testData.filePath;
-    }
 
     public get testChildren(): TestItem[] {
         return this._testChildren;
@@ -24,7 +20,7 @@ export default class TestItem extends vscode.TreeItem {
     ) {
         super(label, collapsibleState);
 
-        this._testData = testCafeData;
+        this.testData = testCafeData;
 
         this.command =  {
             command: 'testOutline.openTest', 
@@ -44,7 +40,7 @@ export default class TestItem extends vscode.TreeItem {
     }
 
     public openTest() {
-        vscode.workspace.openTextDocument(this._testData.filePath).then(doc => {
+        vscode.workspace.openTextDocument(this.testData.filePath).then(doc => {
             vscode.window.showTextDocument(doc).then(textEditor => {
                 this.setCursorPosition(textEditor);
             });            
@@ -53,10 +49,10 @@ export default class TestItem extends vscode.TreeItem {
 
     public setCursorPosition(textEditor: vscode.TextEditor) {
         if(textEditor) {
-            let position = new vscode.Position(this._testData.startLine-1,0);
+            let position = new vscode.Position(this.testData.startLine-1,0);
             let selection = new vscode.Selection(position, position);
             textEditor.selection = selection;
-            let range = textEditor.document.lineAt(this._testData.startLine-1).range;
+            let range = textEditor.document.lineAt(this.testData.startLine-1).range;
             textEditor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
         }
     }     
