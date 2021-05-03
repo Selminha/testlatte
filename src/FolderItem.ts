@@ -55,7 +55,7 @@ export default class FolderItem extends vscode.TreeItem {
 
     private getFilePaths(): Thenable<vscode.Uri[]> {
         let configuredPath: string = Util.getConfiguredFilePath(this.folder);
-        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.folder, configuredPath + '**/*.{ts,js}');
+        let relativePattern: vscode.RelativePattern = new vscode.RelativePattern(this.folder, configuredPath + '**/*.*');
         return (vscode.workspace.findFiles(relativePattern, 'node_modules'));
     }
 
