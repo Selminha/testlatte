@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.1 - Jul 13, 2021
+- Security updates
+- Added support to coffee script and testcafe studio extensions
+
 ## 2.1.0 - Jan 12, 2021
 - Changed tslint to eslint.
 - Added welcome views.
