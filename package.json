@@ -6,7 +6,7 @@
 	"version": "2.1.0",
 	"icon": "images/icon.png",
 	"engines": {
-		"vscode": "^1.52.1"
+		"vscode": "^1.58.1"
 	},
 	"categories": [
 		"Debuggers",
