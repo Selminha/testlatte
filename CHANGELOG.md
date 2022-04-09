@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.1.2 - Apr 08, 2022
+- Security updates
+
 ## 2.1.1 - Jul 13, 2021
 - Security updates
 - Added support to coffee script and testcafe studio extensions
