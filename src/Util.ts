@@ -42,6 +42,6 @@ export default class Util {
     }
 
     public static instanceOfTreeItemLabel(object: any): object is vscode.TreeItemLabel {
-        return object.label != undefined;
+        return object.label !== undefined;
     }
 }
