@@ -196,7 +196,7 @@
 		"vscode-test": "^1.5.2"
 	},
 	"dependencies": {
-		"testcafe": "^1.15.0",
+		"testcafe": "^15.1.317922",
 		"testcafe-browser-tools": "^1.7.1"
 	},
 	"repository": {
