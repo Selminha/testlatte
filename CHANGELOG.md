@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.1.3 - Mar 02, 2023
+- Security updates
+
 ## 2.1.2 - Apr 08, 2022
 - Security updates
 
