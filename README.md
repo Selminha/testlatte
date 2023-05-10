@@ -2,7 +2,7 @@
 
 [![ko-fi](./images/BuyMeACoffee_Red.png)](https://ko-fi.com/L4L31WZFI)
 
-TestLatte allows you to Debug or Run your TestCafé tests on visual studio code.
+Testlatte is a Visual Studio Code extension designed to assist in running and debugging Testcafe tests. It scans your folder for tests and displays them in the side panel of VSCode.
 
 TestLatte is available on [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=sshimono.testlatte) and on [Eclipse Open VSX](https://open-vsx.org/extension/sshimono/testlatte)
 
